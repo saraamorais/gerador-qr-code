@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerador de QR Code WhatsApp Permanente & Placa 6x4cm | SubliBox</title>
-  <meta name="description" content="Crie grátis seu QR Code permanente para WhatsApp ou monte sua Placa de Acrílico 4-em-1 (Wi-Fi, Pix, WhatsApp e Instagram) no tamanho 6x4cm." />
+  <meta name="description" content="Crie grátis seu QR Code permanente para WhatsApp (sem mensalidade e nunca expira) ou monte sua Placa de Acrílico 4-em-1 (Wi-Fi, Pix, WhatsApp e Instagram) no tamanho 6x4cm." />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Biblioteca QR Code Styling v1.6.0-rc.1 -->
+  <!-- Biblioteca QR Code Styling v1.6.0-rc.1 (corrige artefatos no estilo bolinhas) -->
   <script src="https://unpkg.com/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
 
   <!-- Google Fonts -->
@@ -73,8 +73,10 @@
   <script>
     const SITE_CONFIG = {
       brandName: "SubliBox",
-      defaultPhone: "85 99265-7254",
+      defaultPhone: "85 99999-0000",
+      whatsappOrderDigits: "5585992657254",
       defaultMessage: "Olá! Vim pelo QR Code e gostaria de mais informações.",
+      orderMessage: "Olá SubliBox! Vim pelo site Gerador de QR Code e gostaria de fazer um orçamento de plaquinhas ou produtos personalizados.",
       instagramHandle: "@lojasublibox",
       instagramUrl: "https://instagram.com/lojasublibox",
       proPrice: "R$ 9,90",
@@ -84,20 +86,20 @@
       affiliateProducts: [
         {
           title: "Placa Pix Display Acrílica Qr Code Mesa Balção",
-          subtitle: "Display acrílico transparente para destacar seu QR Code no atendimento",
-          tag: "Mais Vendido",
+          tag: "Tamanho 10×15cm",
+          subtitle: "Display acrílico transparente tamanho 10×15cm pronto para balcão e atendimento rápido",
           url: "https://s.shopee.com.br/2BGYk2pAZw"
         },
         {
           title: "Placa Sinalização Decorativa de parede QRcode WIFI",
-          subtitle: "Placa decorativa prática para facilitar o acesso dos clientes ao Wi-Fi",
-          tag: "Decorativa",
+          tag: "Tamanho 10×15cm",
+          subtitle: "Placa decorativa tamanho 10×15cm ideal para sinalizar a rede Wi-Fi para clientes",
           url: "https://s.shopee.com.br/1BO1YOs31d"
         },
         {
           title: "Placa Pix 3 em 1 Pagamento Display Mesa Balcão",
-          subtitle: "Display completo 3 em 1 para balcão e pagamentos rápidos",
-          tag: "3 em 1",
+          tag: "Tamanho 10×15cm",
+          subtitle: "Suporte de mesa tamanho 10×15cm prático para pagamentos e atendimento no balcão",
           url: "https://s.shopee.com.br/LouYtCteN"
         }
       ]
@@ -107,23 +109,40 @@
   <!-- CABEÇALHO -->
   <header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-30">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-extrabold text-base shadow-sm">
-          QR
+      <a href="#" class="flex items-center gap-3">
+        <!-- Logo Oficial SubliBox (SVG Vetorial) -->
+        <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center p-1 shadow-sm shrink-0">
+          <svg viewBox="0 0 120 120" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-label="Logo SubliBox">
+            <!-- Estrela de 4 pontas amarela -->
+            <path d="M60 12 C62 24 66 28 78 30 C66 32 62 36 60 48 C58 36 54 32 42 30 C54 28 58 24 60 12 Z" fill="#FBBF24" />
+            <!-- Aba superior esquerda (Roxo) -->
+            <path d="M18 46 L44 52 L56 68 L28 60 Z" fill="#4B287C" stroke="#4B287C" stroke-width="3" stroke-linejoin="round" />
+            <!-- Aba superior direita (Roxo) -->
+            <path d="M102 46 L76 52 L64 68 L92 60 Z" fill="#4B287C" stroke="#4B287C" stroke-width="3" stroke-linejoin="round" />
+            <!-- Triângulo interno da abertura (Rosa) -->
+            <path d="M51 58 Q60 55 69 58 L60 72 Z" fill="#EC487F" stroke="#EC487F" stroke-width="2" stroke-linejoin="round" />
+            <!-- Face esquerda da caixa (Roxo) -->
+            <path d="M26 66 L57 76 L57 104 L26 92 Z" fill="#4B287C" stroke="#4B287C" stroke-width="4" stroke-linejoin="round" />
+            <!-- Face direita da caixa (Rosa) -->
+            <path d="M94 66 L63 76 L63 104 L94 92 Z" fill="#EC487F" stroke="#EC487F" stroke-width="4" stroke-linejoin="round" />
+          </svg>
         </div>
+
         <div class="leading-tight">
-          <span class="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight block">
-            Subli<span class="text-emerald-600">Box</span> <span class="font-semibold text-slate-700">QR WhatsApp</span>
+          <span class="text-base sm:text-lg tracking-tight block">
+            <strong class="font-extrabold text-[#0f172a]">Subli</strong><strong class="font-extrabold text-[#059669]">Box</strong><span class="font-medium text-[#334155]"> QR WhatsApp</span>
           </span>
-          <span class="text-[11px] font-medium text-slate-500 block -mt-0.5">100% Permanente • Link Oficial wa.me</span>
+          <span class="text-[11px] font-medium text-[#64748b] block -mt-0.5">
+            100% Permanente • Link Oficial wa.me
+          </span>
         </div>
       </a>
 
       <nav class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-600">
         <a href="#gerador" class="hover:text-emerald-600 transition">Gerador Grátis</a>
         <a href="#placa-pro" class="hover:text-amber-600 transition">Placa 6x4cm PRO</a>
-        <a href="#acessorios" class="hover:text-emerald-600 transition">Displays & Papéis</a>
-        <a href="#faq" class="hover:text-emerald-600 transition">Dúvidas</a>
+        <a href="#acessorios" class="hover:text-emerald-600 transition">Suportes 10×15cm</a>
+        <a href="#faq" class="hover:text-emerald-600 transition">Dúvidas Frequentes</a>
       </nav>
 
       <div class="flex items-center gap-2.5">
@@ -146,13 +165,13 @@
         <div>
           <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200/70 px-3 py-1 rounded-full mb-2.5">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Gratuito • Sem prazo de validade
+            100% Gratuito • Sem Prazo de Validade
           </span>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Crie seu QR Code do WhatsApp Permanente
           </h1>
           <p class="text-sm text-slate-500 mt-1.5">
-            Gera o link direto oficial (<code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-700">wa.me</code>) sem intermediários e sem mensalidades.
+            Gera o link direto oficial (<code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-700">wa.me</code>) sem intermediários, sem cadastro e sem cobrança de mensalidade.
           </p>
         </div>
 
@@ -174,8 +193,8 @@
               <input
                 type="tel"
                 id="wa-phone"
-                value="85 99265-7254"
-                placeholder="85 99265-7254"
+                value="85 99999-0000"
+                placeholder="85 99999-0000"
                 inputmode="numeric"
                 class="w-full px-4 py-3 text-slate-900 font-bold text-base focus:outline-none"
               />
@@ -310,7 +329,7 @@
               Baixar QR Code PNG (600px)
             </button>
             <button type="button" id="download-hd-btn" class="py-3.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-2xl shadow-sm transition">
-              Baixar Alta Definição (1500px)
+              Alta Definição (1500px)
             </button>
           </div>
 
@@ -319,7 +338,7 @@
               Baixar Vetor (SVG)
             </button>
             <button type="button" id="open-print-modal-btn" class="py-3 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs rounded-2xl border border-emerald-200 transition">
-              Imprimir Placa Simples 10x15cm
+              Placa Simples 10x15
             </button>
           </div>
         </div>
@@ -347,24 +366,24 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8 items-start">
-        <!-- CONFIGURADOR DA PLACA 6x4CM -->
-        <div class="lg:col-span-6 space-y-5 bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8 items-stretch">
+        <!-- CONFIGURADOR DA PLACA 6x4CM (COLUNA ESQUERDA ALINHADA À DIREITA) -->
+        <div class="lg:col-span-6 h-full bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-7 flex flex-col justify-between gap-6">
           <!-- 1. IDENTIDADE DA EMPRESA -->
-          <div class="space-y-3 pb-4 border-b border-white/10">
+          <div class="space-y-4 pb-6 border-b border-white/10">
             <div class="flex items-center justify-between">
               <h3 class="text-sm font-extrabold uppercase tracking-wider text-teal-300">1. Logo e Nome da Empresa</h3>
               <span class="text-[11px] text-slate-400">Cores extraídas da logo</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label for="pro-company-input" class="block text-xs font-semibold text-slate-300 mb-1">Nome da Empresa (opcional)</label>
-                <input type="text" id="pro-company-input" placeholder="Ex: SubliBox" class="w-full rounded-xl bg-slate-950/70 border border-white/15 px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400" />
+                <label for="pro-company-input" class="block text-xs font-semibold text-slate-300 mb-1.5">Nome da Empresa (opcional)</label>
+                <input type="text" id="pro-company-input" placeholder="Ex: SubliBox" class="w-full rounded-xl bg-slate-950/70 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400" />
               </div>
 
               <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">Logo (define as cores da arte)</label>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Logo (define as cores da arte)</label>
                 <div class="flex items-center gap-2">
                   <label for="pro-logo-input" class="flex-1 cursor-pointer text-center text-xs font-bold bg-teal-500/20 hover:bg-teal-500/30 text-teal-200 border border-teal-400/30 py-2.5 px-3 rounded-xl transition">
                     Subir Logo
@@ -397,11 +416,11 @@
           </div>
 
           <!-- 2. DADOS DOS 4 QR CODES -->
-          <div class="space-y-4">
+          <div class="flex-1 flex flex-col justify-between space-y-4">
             <h3 class="text-sm font-extrabold uppercase tracking-wider text-teal-300">2. Dados dos 4 QR Codes</h3>
 
             <!-- WI-FI -->
-            <div class="bg-slate-950/50 border border-white/10 rounded-xl p-3.5 space-y-2.5">
+            <div class="bg-slate-950/50 border border-white/10 rounded-xl p-4 space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-extrabold text-white">QR 1: WI-FI (Print recortado)</span>
                 <label for="pro-wifi-file" id="pro-wifi-upload-label" class="cursor-pointer text-xs font-bold bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg transition">
@@ -409,14 +428,14 @@
                 </label>
                 <input type="file" id="pro-wifi-file" accept="image/*" class="hidden" />
               </div>
-              <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="pro-wifi-name" placeholder="Rede (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-slate-500" />
-                <input type="text" id="pro-wifi-pass" placeholder="Senha (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-slate-500" />
+              <div class="grid grid-cols-2 gap-2.5">
+                <input type="text" id="pro-wifi-name" placeholder="Rede (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-xs text-white placeholder-slate-500" />
+                <input type="text" id="pro-wifi-pass" placeholder="Senha (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-xs text-white placeholder-slate-500" />
               </div>
             </div>
 
             <!-- PIX -->
-            <div class="bg-slate-950/50 border border-white/10 rounded-xl p-3.5 space-y-2.5">
+            <div class="bg-slate-950/50 border border-white/10 rounded-xl p-4 space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-extrabold text-white">QR 2: PIX (Print recortado)</span>
                 <label for="pro-pix-file" id="pro-pix-upload-label" class="cursor-pointer text-xs font-bold bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg transition">
@@ -424,36 +443,36 @@
                 </label>
                 <input type="file" id="pro-pix-file" accept="image/*" class="hidden" />
               </div>
-              <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="pro-pix-holder" placeholder="Nome do Titular (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-slate-500" />
-                <input type="text" id="pro-pix-key" placeholder="Chave Pix (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-slate-500" />
+              <div class="grid grid-cols-2 gap-2.5">
+                <input type="text" id="pro-pix-holder" placeholder="Nome do Titular (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-xs text-white placeholder-slate-500" />
+                <input type="text" id="pro-pix-key" placeholder="Chave Pix (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-xs text-white placeholder-slate-500" />
               </div>
             </div>
 
             <!-- WHATSAPP E INSTAGRAM -->
-            <div class="bg-slate-950/50 border border-white/10 rounded-xl p-3.5 space-y-2.5">
+            <div class="bg-slate-950/50 border border-white/10 rounded-xl p-4 space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-extrabold text-white">QR 3 & 4: WhatsApp + Instagram</span>
                 <span class="text-[11px] text-emerald-400">Gerados automaticamente</span>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <input type="text" id="pro-insta-input" placeholder="Link ou @ do Instagram" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-slate-500" />
-                <input type="text" id="pro-zap-label" placeholder="Texto abaixo do Zap (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-slate-500" />
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input type="text" id="pro-insta-input" placeholder="Link ou @ do Instagram" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-xs text-white placeholder-slate-500" />
+                <input type="text" id="pro-zap-label" placeholder="Texto abaixo do Zap (opcional)" class="rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-xs text-white placeholder-slate-500" />
               </div>
             </div>
           </div>
         </div>
 
-        <!-- PRÉVIA 6CM X 4CM E CHECKOUT -->
-        <div class="lg:col-span-6 space-y-5">
+        <!-- PRÉVIA 6CM X 4CM E CHECKOUT (COLUNA DIREITA) -->
+        <div class="lg:col-span-6 flex flex-col justify-between space-y-5">
           <div class="bg-white/5 border border-white/10 rounded-2xl p-4 sm:p-5 space-y-3">
             <div class="flex items-center justify-between text-xs">
               <span class="font-bold text-slate-300 uppercase tracking-wider">Prévia em escala 6cm × 4cm</span>
               <span class="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-200 font-semibold">60mm × 40mm • 600 DPI</span>
             </div>
 
-            <div class="relative rounded-xl overflow-hidden shadow-2xl border border-white/15 bg-white select-none" oncontextmenu="return false;">
-              <canvas id="pro-preview-canvas" width="1417" height="945" class="pointer-events-none"></canvas>
+            <div class="relative rounded-xl overflow-hidden shadow-2xl border border-white/15 bg-white">
+              <canvas id="pro-preview-canvas" width="1417" height="945"></canvas>
             </div>
 
             <p class="text-[11px] text-slate-400 text-center">
@@ -467,7 +486,7 @@
               <div>
                 <h4 class="font-extrabold text-base text-slate-900">Desbloquear Placa 6cm × 4cm (600 DPI)</h4>
                 <p class="text-xs text-slate-500 mt-0.5">
-                  Pague via <strong>Pix ou Cartão</strong> no Mercado Pago. Ao finalizar, clique em "Voltar ao site" para liberar na hora.
+                  Pagamento único via <strong>Pix ou Cartão</strong> no Mercado Pago. Ao finalizar, clique em "Voltar ao site" para liberar automaticamente.
                 </p>
               </div>
               <span class="text-lg font-extrabold text-emerald-700 shrink-0">R$ 9,90</span>
@@ -489,13 +508,16 @@
                 <input
                   type="text"
                   id="pro-unlock-input"
-                  placeholder="Digite o código"
+                  placeholder="DIGITE O CÓDIGO"
                   class="flex-1 rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold uppercase text-slate-800 focus:outline-none focus:border-emerald-500"
                 />
                 <button type="button" id="pro-unlock-btn" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition">
                   Liberar
                 </button>
               </div>
+              <p class="text-[11px] text-slate-500 mt-2.5 leading-relaxed">
+                Teve algum problema ou fechou a página antes? <a href="https://wa.me/5585992657254?text=Ol%C3%A1!%20Fiz%20o%20pagamento%20da%20Placa%206x4cm%20PRO%20e%20gostaria%20de%20receber%20meu%20c%C3%B3digo%20de%20libera%C3%A7%C3%A3o.%20Segue%20o%20comprovante:" target="_blank" rel="noopener" class="font-bold text-emerald-700 hover:underline">Envie o comprovante no nosso WhatsApp</a> para receber o código.
+              </p>
             </div>
           </div>
 
@@ -508,14 +530,14 @@
               <span class="text-xs font-semibold text-emerald-700">600 DPI • Sem marca d'água</span>
             </div>
             <p class="text-xs text-slate-700">
-              Arquivo gerado na medida exata de <strong>6,0 cm × 4,0 cm</strong> (1417×945px). Na impressão, selecione <strong>"Tamanho Real (100%)"</strong>.
+              Sua arte está pronta na medida exata de <strong>6 cm × 4 cm</strong>. Na janela da impressora, selecione <strong>"Tamanho Real (100%)"</strong>.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
               <button type="button" id="pro-download-png-btn" class="py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow transition">
-                Baixar Placa 6x4cm (PNG 600 DPI)
+                Baixar Placa 6x4cm (PNG)
               </button>
               <button type="button" id="pro-print-a4-btn" class="py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl shadow transition">
-                Imprimir em Folha A4 (60mm × 40mm)
+                Imprimir em Folha A4 (6x4cm)
               </button>
             </div>
           </div>
@@ -523,39 +545,174 @@
       </div>
     </section>
 
-    <!-- SEÇÃO 3: MATERIAIS RECOMENDADOS (SHOPEE) -->
-    <section id="acessorios" class="space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-1">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Indicações SubliBox</span>
-          <h2 class="text-xl font-extrabold text-slate-900">Suportes e Papéis Recomendados</h2>
+    <!-- SEÇÃO 3: BANNER LOJA OFICIAL SUBLIBOX (ENCOMENDA DIRETA NO WHATSAPP) -->
+    <section class="bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950 rounded-3xl p-7 sm:p-10 text-white shadow-lg border border-slate-800">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2.5 max-w-2xl">
+          <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-emerald-300 bg-emerald-500/15 border border-emerald-400/25 px-3 py-1 rounded-full">
+            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+            </svg>
+            LOJA OFICIAL SUBLIBOX
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
+            Quer seu QR Code impresso em placas, canecas, ímãs ou adesivos personalizados?
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Na <strong class="text-white">SubliBox</strong> produzimos placas de balcão com acabamento profissional, displays personalizados com a sua marca, brindes corporativos e etiquetas prontas para o seu negócio.
+          </p>
         </div>
-        <p class="text-xs text-slate-500">Itens ideais para encaixar sua placa 6x4cm ou 10x15cm no balcão.</p>
+
+        <div class="shrink-0">
+          <a
+            id="sublibox-order-btn"
+            href="https://wa.me/5585992657254?text=Ol%C3%A1%20SubliBox!%20Vim%20pelo%20site%20Gerador%20de%20QR%20Code%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20de%20plaquinhas%20ou%20produtos%20personalizados."
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center justify-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm px-6 py-4 rounded-2xl shadow-lg shadow-emerald-950/50 transition"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+            </svg>
+            Encomendar com a SubliBox
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: VITRINE DE SUPORTES SHOPEE (EXCLUSIVAMENTE 10x15CM) -->
+    <section id="acessorios" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 block mb-0.5">
+            INDICAÇÕES SUBLIBOX
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Suportes Recomendados</h2>
+        </div>
+        <p class="text-xs font-medium text-slate-500">
+          Displays e placas de balcão exclusivamente no tamanho <strong class="text-slate-700">10×15cm</strong>.
+        </p>
       </div>
       <div id="affiliate-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
     </section>
 
-    <!-- SEÇÃO 4: PERGUNTAS FREQUENTES -->
-    <section id="faq" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-        <h2 class="font-extrabold text-lg text-slate-900 mb-2">Por que este QR Code nunca expira?</h2>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          Diferente de geradores que redirecionam por servidores pagos e bloqueiam seu código após alguns dias, aqui o QR Code grava diretamente o endereço oficial <code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">https://wa.me/seunumero</code>. Enquanto seu WhatsApp existir, ele funciona para sempre.
-        </p>
+    <!-- SEÇÃO 5: PERGUNTAS FREQUENTES (FAQ) -->
+    <section id="faq" class="space-y-6 pt-2">
+      <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-white border border-emerald-200/80 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl">
+          <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
+            Transparência Total • Sem Pegadinhas
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Dúvidas Frequentes (FAQ)
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Diferente de outros sites que criam códigos com prazo de validade para cobrar assinatura mensal depois, o <strong>Gerador de QR Code WhatsApp da SubliBox é 100% gratuito</strong>, sem cadastro e sem limite de escaneamentos.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 shrink-0 text-center">
+          <div class="bg-white border border-emerald-200/80 rounded-2xl px-3.5 py-2.5 shadow-sm">
+            <div class="text-sm font-extrabold text-emerald-700">R$ 0,00</div>
+            <div class="text-[11px] font-semibold text-slate-500">QR WhatsApp Grátis</div>
+          </div>
+          <div class="bg-white border border-emerald-200/80 rounded-2xl px-3.5 py-2.5 shadow-sm">
+            <div class="text-sm font-extrabold text-emerald-700">Vitalício</div>
+            <div class="text-[11px] font-semibold text-slate-500">Nunca expira</div>
+          </div>
+          <div class="col-span-2 sm:col-span-1 bg-white border border-emerald-200/80 rounded-2xl px-3.5 py-2.5 shadow-sm">
+            <div class="text-sm font-extrabold text-emerald-700">Ilimitado</div>
+            <div class="text-[11px] font-semibold text-slate-500">Sem cadastro</div>
+          </div>
+        </div>
       </div>
 
-      <div class="lg:col-span-7 space-y-2.5">
-        <details class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm" open>
-          <summary class="font-bold text-sm text-slate-900 cursor-pointer">Como imprimir a Placa 4-em-1 PRO no tamanho exato 6cm × 4cm?</summary>
-          <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-            Após desbloquear, clique em <strong>Imprimir em Folha A4 (60mm × 40mm)</strong> e marque a opção <strong>Tamanho Real / Escala 100%</strong> nas configurações da impressora. A arte já sai com borda tracejada para recorte exato.
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
+        <!-- DÚVIDA 1 -->
+        <details class="group bg-white rounded-2xl border-2 border-emerald-200 p-5 shadow-sm open:ring-2 open:ring-emerald-500/20 transition" open>
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>1. Por que este gerador é 100% gratuito enquanto outros sites cobram?</span>
+            <span class="w-7 h-7 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            Muitos sites na internet criam <strong>QR Codes dinâmicos</strong> que passam por um servidor pago intermediário. Após 7 ou 14 dias de teste, eles bloqueiam o seu código e exigem assinatura mensal para ele voltar a funcionar. Aqui o gerador de QR Code do WhatsApp é <strong>100% gratuito para sempre</strong>, sem cadastro, sem limite de escaneamentos e sem pegadinhas.
           </p>
         </details>
 
-        <details class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-          <summary class="font-bold text-sm text-slate-900 cursor-pointer">Meus prints de Pix, Wi-Fi ou logo ficam salvos em algum servidor?</summary>
-          <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-            Não. Todo o recorte de imagem, leitura de cores da logo e geração dos QR Codes acontece 100% localmente no seu próprio navegador.
+        <!-- DÚVIDA 2 -->
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition" open>
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>2. O QR Code do WhatsApp expira ou deixa de funcionar com o tempo?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Nunca expira.</strong> O código grava diretamente o endereço oficial do WhatsApp (<code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">https://wa.me/55...</code>) dentro dos próprios pontos da imagem, sem depender de nenhum servidor externo. Enquanto o seu número existir no WhatsApp, o QR Code funcionará normalmente.
+          </p>
+        </details>
+
+        <!-- DÚVIDA 3 -->
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>3. Preciso criar conta ou cadastrar e-mail para baixar o QR Code?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Não precisa de nenhum cadastro.</strong> Basta digitar seu número, personalizar a cor ou estilo se desejar e clicar para baixar imediatamente em <strong>PNG (600px)</strong>, <strong>Alta Definição (1500px)</strong>, <strong>Vetor (SVG)</strong> ou gerar a <strong>Placa Simples 10×15cm</strong> totalmente de graça.
+          </p>
+        </details>
+
+        <!-- DÚVIDA 4 -->
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>4. Posso colocar minha logo no centro sem estragar a leitura da câmera?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Sim!</strong> Utilizamos correção de erro <strong>Nível H (30%)</strong>, o padrão mais alto de redundância para QR Codes. Isso garante que a câmera de qualquer celular (Android ou iPhone) leia o código instantaneamente mesmo com o ícone do WhatsApp ou a logo da sua empresa no centro.
+          </p>
+        </details>
+
+        <!-- DÚVIDA 5 -->
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>5. Como funciona a Placa 4-em-1 PRO (6cm × 4cm)?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            O gerador de QR Code WhatsApp é 100% gratuito. Já a <strong>Placa 4-em-1 PRO</strong> é um recurso opcional para quem deseja a arte pronta diagramada na medida exata <strong>6cm × 4cm (600 DPI)</strong> reunindo <strong>Wi-Fi + Pix + WhatsApp + Instagram</strong> com as cores extraídas da sua logo, cobrando apenas uma <strong>taxa única de R$ 9,90</strong> (sem mensalidade).
+          </p>
+        </details>
+
+        <!-- DÚVIDA 6 -->
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>6. Como recorto o QR Code do Pix e do Wi-Fi para colocar na placa?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            É bem simples: tire um print da tela do QR Code no aplicativo do seu banco (Pix) ou nas configurações do roteador/celular (Wi-Fi) e clique em <strong>"+ Subir Print"</strong> na área da placa. O site abre automaticamente uma janela de recorte quadrado com zoom para você enquadrar só o código.
+          </p>
+        </details>
+
+        <!-- DÚVIDA 7 -->
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>7. Qual papel e tamanho devo usar para imprimir a placa 6×4cm?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            Recomendamos imprimir em <strong>Papel Fotográfico Glossy 180g</strong> para garantir contraste nítido nos 4 QR Codes pequenos. Ao clicar em <strong>"Imprimir em Folha A4 (6x4cm)"</strong>, marque a opção <strong>"Tamanho Real (100%)"</strong> na janela da impressora e recorte na linha tracejada.
+          </p>
+        </details>
+
+        <!-- DÚVIDA 8 -->
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>8. Meus dados, número ou prints ficam salvos em algum servidor?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Não.</strong> Todo o processamento — incluindo a geração dos QR Codes, leitura das cores da sua logo e recorte dos prints de Pix e Wi-Fi — acontece 100% localmente no seu próprio navegador, garantindo total privacidade e segurança dos seus dados.
           </p>
         </details>
       </div>
@@ -685,7 +842,9 @@
 
     function showToast(text) {
       const el = document.getElementById("toast");
-      document.getElementById("toast-msg").textContent = text;
+      const msgEl = document.getElementById("toast-msg");
+      if (!el || !msgEl) return;
+      msgEl.textContent = text;
       el.classList.remove("translate-y-20", "opacity-0");
       setTimeout(() => el.classList.add("translate-y-20", "opacity-0"), 2800);
     }
@@ -703,19 +862,24 @@
     }
 
     function buildWhatsAppLink() {
-      const digits = cleanDigits(document.getElementById("wa-phone").value);
+      const phoneInput = document.getElementById("wa-phone");
+      const msgInput = document.getElementById("wa-message");
       const badge = document.getElementById("phone-badge");
-      if (digits.length === 10 || digits.length === 11 || digits.length >= 12) {
-        badge.textContent = "Número válido";
-        badge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full";
-      } else {
-        badge.textContent = "Digite DDD + número";
-        badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full";
+
+      const digits = cleanDigits(phoneInput ? phoneInput.value : "");
+      if (badge) {
+        if (digits.length === 10 || digits.length === 11 || digits.length >= 12) {
+          badge.textContent = "Número válido";
+          badge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full";
+        } else {
+          badge.textContent = "Digite DDD + número";
+          badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full";
+        }
       }
 
       const fullNumber = digits.startsWith("55") && digits.length >= 12 ? digits : "55" + digits;
-      const msg = document.getElementById("wa-message").value.trim();
-      const base = `https://wa.me/${fullNumber || "5585992657254"}`;
+      const msg = msgInput ? msgInput.value.trim() : "";
+      const base = `https://wa.me/${fullNumber || "5585999990000"}`;
       return msg ? `${base}?text=${encodeURIComponent(msg)}` : base;
     }
 
@@ -754,20 +918,27 @@
 
     function updateMainQR() {
       const link = buildWhatsAppLink();
-      document.getElementById("generated-link").value = link;
-      document.getElementById("test-link-btn").href = link;
+      const genLinkInput = document.getElementById("generated-link");
+      const testLinkBtn = document.getElementById("test-link-btn");
+      if (genLinkInput) genLinkInput.value = link;
+      if (testLinkBtn) testLinkBtn.href = link;
 
       const container = document.getElementById("qr-canvas-container");
-      container.innerHTML = "";
-
-      if (typeof QRCodeStyling !== "undefined") {
-        qrCodeInstance = new QRCodeStyling(getMainQROptions(520));
-        qrCodeInstance.append(container);
+      if (container) {
+        container.innerHTML = "";
+        if (typeof QRCodeStyling !== "undefined") {
+          qrCodeInstance = new QRCodeStyling(getMainQROptions(520));
+          qrCodeInstance.append(container);
+        } else {
+          container.innerHTML = '<div class="text-xs text-slate-400 p-4">Carregando gerador...</div>';
+          setTimeout(updateMainQR, 300);
+          return;
+        }
       }
       renderProBoard();
     }
 
-    // PERSISTÊNCIA LOCAL DO RASCUNHO (PARA NÃO PERDER AO IR PAGAR NO MERCADO PAGO)
+    // PERSISTÊNCIA LOCAL DO RASCUNHO
     function saveProDraft() {
       try {
         const draft = {
@@ -1070,7 +1241,7 @@
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, W, H);
 
-      // Ondas proporcionais nos cantos superior esquerdo e inferior direito (sem invadir título ou textos)
+      // Ondas proporcionais nos cantos superior esquerdo e inferior direito
       ctx.save();
       ctx.fillStyle = secondary;
       ctx.beginPath();
@@ -1105,7 +1276,6 @@
       ctx.fill();
       ctx.restore();
 
-      // Função auxiliar para desenhar o título principal respeitando largura máxima segura (W * 0.72)
       function drawFittedMainTitle(text, centerY, baseSize) {
         ctx.save();
         let fontSize = baseSize;
@@ -1186,7 +1356,8 @@
         createQRCanvasPromise(instaClean, "#0f172a", null)
       ]);
 
-      const phoneFormatted = document.getElementById("wa-phone").value.trim() || SITE_CONFIG.defaultPhone;
+      // Lê exatamente o que está no campo de telefone: se apagado, desaparece da placa
+      const phoneFormatted = document.getElementById("wa-phone").value.trim();
       const instaDisplay = rawInsta
         ? (rawInsta.startsWith("http") ? "@" + rawInsta.split("/").filter(Boolean).pop() : (rawInsta.startsWith("@") ? rawInsta : "@" + rawInsta))
         : "";
@@ -1267,7 +1438,6 @@
           ctx.restore();
         }
 
-        // Posicionamento vertical harmonizado até a base da placa 6x4cm (sem excesso de espaço vazio)
         const titleY = boxY + boxSize + H * 0.105;
         ctx.save();
         ctx.font = `700 ${Math.round(H * 0.062)}px 'Oswald', sans-serif`;
@@ -1512,6 +1682,7 @@
 
     function renderAffiliateCards() {
       const grid = document.getElementById("affiliate-grid");
+      if (!grid) return;
       grid.innerHTML = SITE_CONFIG.affiliateProducts.map((p) => `
         <a href="${p.url}" target="_blank" rel="noopener sponsored" class="group bg-white border border-slate-200 hover:border-emerald-400 rounded-2xl p-5 shadow-sm hover:shadow transition flex flex-col justify-between">
           <div>
@@ -1522,7 +1693,7 @@
             <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">${p.subtitle}</p>
           </div>
           <div class="mt-4 text-xs font-extrabold text-emerald-600 flex items-center gap-1">
-            Ver oferta na Shopee →
+            Ver suporte 10×15cm na Shopee →
           </div>
         </a>
       `).join("");
@@ -1532,6 +1703,11 @@
       document.getElementById("current-year").textContent = new Date().getFullYear();
       document.getElementById("pro-pay-btn").href = SITE_CONFIG.proLinkMercadoPago;
       document.getElementById("pro-pay-btn").addEventListener("click", saveProDraft);
+
+      const orderBtn = document.getElementById("sublibox-order-btn");
+      if (orderBtn) {
+        orderBtn.href = `https://wa.me/${SITE_CONFIG.whatsappOrderDigits}?text=${encodeURIComponent(SITE_CONFIG.orderMessage)}`;
+      }
 
       renderAffiliateCards();
       await restoreProDraft();
