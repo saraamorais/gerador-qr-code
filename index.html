@@ -487,21 +487,19 @@
               <div>
                 <h4 class="font-extrabold text-base text-slate-900">Desbloquear Placa 6cm × 4cm (600 DPI)</h4>
                 <p class="text-xs text-slate-500 mt-0.5">
-                  Pagamento único via <strong>Pix ou Cartão</strong> no Mercado Pago. Ao finalizar, clique em "Voltar ao site" para liberar automaticamente.
+                  Pagamento único via <strong>Pix ou Cartão</strong> no Mercado Pago com liberação automática assim que o pagamento for confirmado.
                 </p>
               </div>
               <span class="text-lg font-extrabold text-emerald-700 shrink-0">R$ 9,90</span>
             </div>
 
-            <a
+            <button
+              type="button"
               id="pro-pay-btn"
-              href="https://mpago.la/11vWDee"
-              target="_blank"
-              rel="noopener"
-              class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2"
+              class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-extrabold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2"
             >
               Pagar R$ 9,90 (Pix ou Cartão)
-            </a>
+            </button>
 
             <div class="pt-2 border-t border-slate-100">
               <label class="block text-[11px] font-bold text-slate-500 mb-1.5">Já pagou ou possui o código de liberação?</label>
@@ -1595,8 +1593,58 @@
       renderProBoard();
     }
 
-    function checkAutoUnlock() {
+    async function iniciarCheckoutPro() {
+      const btn = document.getElementById("pro-pay-btn");
+      const originalText = btn.textContent;
+      saveProDraft();
+      btn.disabled = true;
+      btn.textContent = "Conectando ao Mercado Pago...";
+
+      try {
+        const res = await fetch("/api/criar-pagamento", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            titulo: "Placa de Balcao 4-em-1 PRO (6x4cm)",
+            valor: 9.9
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.init_point) {
+          throw new Error(data.error || "Falha ao iniciar o Checkout Pro.");
+        }
+        window.location.href = data.init_point;
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = originalText;
+        showToast(err.message || "Não foi possível iniciar o pagamento agora.");
+      }
+    }
+
+    async function checkAutoUnlock() {
       const params = new URLSearchParams(window.location.search);
+      const paymentId = params.get("payment_id") || params.get("collection_id");
+
+      if (paymentId) {
+        showToast("Verificando confirmação do pagamento...");
+        try {
+          const res = await fetch(`/api/verificar-pagamento?payment_id=${encodeURIComponent(paymentId)}`);
+          const data = await res.json();
+          if (res.ok && data.aprovado) {
+            unlockProMode(true);
+            window.history.replaceState({}, document.title, window.location.pathname + "#placa-pro");
+            const sec = document.getElementById("placa-pro");
+            if (sec) sec.scrollIntoView({ behavior: "smooth" });
+            showToast("Pagamento confirmado! Placa 6x4cm PRO liberada.");
+            return;
+          } else {
+            showToast("Pagamento ainda pendente ou não aprovado.");
+          }
+        } catch (e) {
+          showToast("Não foi possível validar o pagamento automaticamente.");
+        }
+      }
+
       if ((params.get("pro") || "").toUpperCase() === SITE_CONFIG.proUnlockParam) {
         unlockProMode(true);
         const cleanUrl = window.location.pathname + "#placa-pro";
@@ -1604,6 +1652,7 @@
         showToast("Pagamento confirmado! Placa 6x4cm PRO liberada.");
         return;
       }
+
       try {
         if (localStorage.getItem("sublibox_pro_6x4_unlocked") === "1") {
           unlockProMode(false);
@@ -1702,8 +1751,7 @@
 
     document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("current-year").textContent = new Date().getFullYear();
-      document.getElementById("pro-pay-btn").href = SITE_CONFIG.proLinkMercadoPago;
-      document.getElementById("pro-pay-btn").addEventListener("click", saveProDraft);
+      document.getElementById("pro-pay-btn").addEventListener("click", iniciarCheckoutPro);
 
       const orderBtn = document.getElementById("sublibox-order-btn");
       if (orderBtn) {
@@ -1712,7 +1760,7 @@
 
       renderAffiliateCards();
       await restoreProDraft();
-      checkAutoUnlock();
+      await checkAutoUnlock();
       updateMainQR();
 
       // Eventos do gerador gratuito
