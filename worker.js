@@ -11,14 +11,15 @@ export default {
       try {
         const body = await request.json().catch(() => ({}));
         const origem = url.origin;
+        const precoOficial = 9.9;
 
         const preferenciaPayload = {
           items: [
             {
-              title: body.titulo || "Placa de Balcao 4-em-1 PRO",
+              title: body.titulo || "Placa de Balcao 4-em-1 PRO (6x4cm)",
               quantity: 1,
               currency_id: "BRL",
-              unit_price: Number(body.valor) > 0 ? Number(body.valor) : 9.9
+              unit_price: precoOficial
             }
           ],
           back_urls: {
@@ -55,15 +56,17 @@ export default {
       }
     }
 
-    // Rota para verificar se um pagamento específico está aprovado
+    // Rota para verificar se um pagamento específico está aprovado e com valor válido
     if (url.pathname === "/api/verificar-pagamento" && request.method === "GET") {
       if (!env.MP_ACCESS_TOKEN) {
         return jsonResponse({ error: "MP_ACCESS_TOKEN não configurado na Cloudflare." }, 500);
       }
 
-      const paymentId = url.searchParams.get("payment_id") || url.searchParams.get("collection_id");
+      const rawId = url.searchParams.get("payment_id") || url.searchParams.get("collection_id") || "";
+      const paymentId = rawId.replace(/\D/g, "");
+
       if (!paymentId) {
-        return jsonResponse({ error: "payment_id não informado." }, 400);
+        return jsonResponse({ aprovado: false, error: "ID do pagamento inválido ou não informado." }, 400);
       }
 
       try {
@@ -76,11 +79,22 @@ export default {
         const mpData = await mpRes.json();
 
         if (!mpRes.ok) {
-          return jsonResponse({ aprovado: false, error: "Pagamento não encontrado." }, mpRes.status);
+          return jsonResponse({ aprovado: false, error: "Pagamento não encontrado no Mercado Pago." }, 404);
+        }
+
+        const isApproved = mpData.status === "approved";
+        const isValidAmount = Number(mpData.transaction_amount) >= 9.9;
+
+        if (!isApproved || !isValidAmount) {
+          return jsonResponse({
+            aprovado: false,
+            status: mpData.status,
+            error: "Pagamento ainda não aprovado ou valor inferior ao da placa."
+          }, 200);
         }
 
         return jsonResponse({
-          aprovado: mpData.status === "approved",
+          aprovado: true,
           status: mpData.status,
           payment_id: mpData.id
         });
