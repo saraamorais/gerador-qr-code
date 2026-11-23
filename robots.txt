@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://gerador-qr-code.sublibox.workers.dev/sitemap.xml
