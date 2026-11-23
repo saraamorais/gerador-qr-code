@@ -6,5 +6,12 @@
   "assets": {
     "directory": "./",
     "not_found_handling": "single-page-application"
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "ORDERS_DB",
+      "database_name": "sublibox-qr-db",
+      "database_id": "b6586cf4-8fd8-4d98-a6ef-4454c3dbc30e"
+    }
+  ]
 }
