@@ -1,0 +1,2339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sublibox Qr | Gerador de QR Code WhatsApp Grátis e Placa QR Code para Balcão 4 em 1</title>
+  <meta name="description" content="Sublibox Qr: Gerador de QR Code WhatsApp gratuito e vitalício, sem cadastro e sem assinatura. Monte também sua Placa QR Code para balcão 4 em 1 (WhatsApp, Wi-Fi, Pix e Instagram) no tamanho 10x15cm e baixe o arquivo digital pronto para imprimir por R$ 9,90." />
+  <meta name="keywords" content="Sublibox Qr, Gerador de QR Code WhatsApp, QR Code Pix, QR Code Wi-Fi, QR Code Instagram, Placa QR Code para balcão 10x15, placa 4 em 1, SubliBox" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gerador-qr-code.sublibox.workers.dev/" />
+
+  <!-- Open Graph / Compartilhamento -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sublibox Qr" />
+  <meta property="og:title" content="Sublibox Qr | Gerador de QR Code WhatsApp e Placa QR Code 10×15cm" />
+  <meta property="og:description" content="Crie seu QR Code WhatsApp permanente grátis ou personalize a Placa QR Code para balcão 10×15cm com WhatsApp, Wi-Fi, Pix e Instagram por R$ 9,90." />
+  <meta property="og:url" content="https://gerador-qr-code.sublibox.workers.dev/" />
+
+  <!-- Dados Estruturados SEO (Ferramenta + FAQ) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Sublibox Qr",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "url": "https://gerador-qr-code.sublibox.workers.dev/",
+        "description": "Gerador de QR Code WhatsApp gratuito e permanente e criador online de Placa QR Code para balcão 4 em 1 (10x15 cm) com WhatsApp, Wi-Fi, Pix e Instagram.",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Gerador de QR Code WhatsApp",
+            "price": "0.00",
+            "priceCurrency": "BRL"
+          },
+          {
+            "@type": "Offer",
+            "name": "Arquivo Digital Placa QR Code para Balcão 4 em 1 (10x15 cm)",
+            "price": "9.90",
+            "priceCurrency": "BRL"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "O Gerador de QR Code WhatsApp do Sublibox Qr é gratuito e vitalício?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim. O QR Code do WhatsApp é estático, gerado localmente no navegador, não exige cadastro e nunca expira."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "O que está incluído na Placa QR Code para balcão 4 em 1 de R$ 9,90?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Você recebe um arquivo digital personalizado em alta resolução (600 DPI, medida exata 10x15 cm) pronto para imprimir, reunindo QR Code WhatsApp, QR Code Wi-Fi, QR Code Pix e QR Code Instagram com as cores da sua logo."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    const SITE_CONFIG = {
+      brandName: "Sublibox Qr",
+      whatsappOrderDigits: "5585992657254",
+      defaultPhone: "85 99999-0000",
+      instagramHandle: "@lojasublibox",
+      instagramUrl: "https://instagram.com/lojasublibox",
+      orderMessage: "Olá SubliBox! Vim pelo site Sublibox Qr e gostaria de fazer um orçamento de plaquinhas ou produtos personalizados.",
+      proPrice: "9,90",
+      affiliateProducts: [
+        {
+          tag: "Display Acrílico L",
+          title: "Display Expositor Acrílico L 10×15cm",
+          subtitle: "Ideal para balcão de loja, recepção e caixa com encaixe frontal limpo.",
+          url: "https://s.shopee.com.br/3fzK913z7O"
+        },
+        {
+          tag: "Display Vertical T",
+          title: "Display de Mesa Acrílico T Dupla Face 10×15cm",
+          subtitle: "Base firme em T para mesas de atendimento, cafés e consultórios.",
+          url: "https://s.shopee.com.br/9Ke9u51w90"
+        },
+        {
+          tag: "Kit Balcão",
+          title: "Kit Display Acrílico de Mesa 10×15cm",
+          subtitle: "Opção econômica para padronizar vários caixas e pontos de atendimento.",
+          url: "https://s.shopee.com.br/9AGd5W8n86"
+        }
+      ]
+    };
+
+    function trackFunnelEvent(eventName, detail = {}) {
+      try {
+        window.dispatchEvent(new CustomEvent("sublibox:analytics", {
+          detail: { eventName, ...detail, ts: Date.now() }
+        }));
+        if (typeof window.gtag === "function") {
+          window.gtag("event", eventName, detail);
+        }
+      } catch (e) {}
+    }
+  </script>
+
+  <style>
+    html, body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+    .font-poster { font-family: 'Oswald', sans-serif; }
+    #qr-canvas-container canvas,
+    #qr-canvas-container svg {
+      width: 100% !important;
+      height: auto !important;
+      max-width: 260px;
+      display: block;
+      margin: 0 auto;
+    }
+    #pro-preview-canvas {
+      width: 100%;
+      max-width: 340px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    @media print {
+      body * { visibility: hidden !important; }
+      #print-area, #print-area * { visibility: visible !important; }
+      #print-area {
+        position: fixed;
+        inset: 0;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        z-index: 99999;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- CABEÇALHO -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-sm shadow-sm shrink-0">
+          QR
+        </div>
+        <div class="min-w-0">
+          <span class="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 block leading-none truncate">
+            Sublibox Qr
+          </span>
+          <span class="text-xs font-medium text-slate-500 block mt-0.5 truncate">
+            Gerador QR Code WhatsApp & Placas
+          </span>
+        </div>
+      </div>
+
+      <nav aria-label="Navegação principal" class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <a href="#placa-pro" class="text-xs font-extrabold text-amber-900 bg-amber-100 hover:bg-amber-200 px-3 py-2 rounded-xl transition">
+          Placa 4 em 1 • R$ 9,90
+        </a>
+        <a href="#faq" class="hidden sm:inline-flex text-xs font-bold text-slate-600 hover:text-emerald-700 px-3 py-2 rounded-xl hover:bg-slate-100 transition">
+          Dúvidas
+        </a>
+        <a href="#acessorios" class="hidden md:inline-flex text-xs font-bold text-slate-600 hover:text-emerald-700 px-3 py-2 rounded-xl hover:bg-slate-100 transition">
+          Suportes 10×15cm
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-10 sm:space-y-12">
+
+    <!-- SEÇÃO 1: GERADOR GRATUITO DE QR CODE WHATSAPP -->
+    <section id="gerador-gratis" class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+      <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-8 space-y-6">
+        <div>
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-2.5">
+            100% Gratuito • Sem Cadastro • Não Expira
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Gerador de QR Code WhatsApp Permanente
+          </h1>
+          <p class="text-sm text-slate-600 mt-1.5 leading-relaxed">
+            Digite seu número com DDD, personalize a mensagem inicial e baixe seu QR Code em alta resolução para imprimir ou compartilhar. Tudo gerado localmente na memória do seu navegador.
+          </p>
+        </div>
+
+        <!-- CAMPO DE TELEFONE -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <label for="wa-phone" class="block text-sm font-bold text-slate-800">
+              Número do WhatsApp (com DDD)
+            </label>
+            <span id="phone-badge" class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full shrink-0">
+              Número válido
+            </span>
+          </div>
+          <div class="flex rounded-2xl border border-slate-300 focus-within:border-emerald-600 focus-within:ring-4 focus-within:ring-emerald-500/10 overflow-hidden bg-white transition">
+            <span class="inline-flex items-center px-3.5 sm:px-4 bg-slate-100 text-slate-700 font-bold text-sm border-r border-slate-300 select-none">
+              +55
+            </span>
+            <input
+              type="tel"
+              id="wa-phone"
+              inputmode="numeric"
+              autocomplete="tel"
+              value="85 99999-0000"
+              placeholder="85 99999-0000"
+              class="w-full px-3.5 sm:px-4 py-3.5 text-base font-semibold text-slate-900 focus:outline-none min-w-0"
+            />
+            <button type="button" id="clear-phone-btn" class="px-3.5 text-xs font-bold text-slate-500 hover:text-slate-800 shrink-0" title="Limpar número">
+              Limpar
+            </button>
+          </div>
+        </div>
+
+        <!-- MENSAGEM INICIAL -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="wa-message" class="block text-sm font-bold text-slate-800">
+              Mensagem automática (opcional)
+            </label>
+            <span id="msg-counter" class="text-xs text-slate-500">43/250</span>
+          </div>
+          <textarea
+            id="wa-message"
+            rows="2"
+            maxlength="250"
+            placeholder="Ex: Olá! Vim pelo QR Code e gostaria de atendimento."
+            class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-800 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition"
+          >Olá! Vim pelo QR Code e quero atendimento.</textarea>
+
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button type="button" class="quick-msg-btn text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-3 py-2 rounded-xl transition" data-msg="Olá! Vim pelo QR Code e gostaria de fazer um pedido.">
+              Fazer pedido
+            </button>
+            <button type="button" class="quick-msg-btn text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-3 py-2 rounded-xl transition" data-msg="Olá! Gostaria de solicitar um orçamento.">
+              Pedir orçamento
+            </button>
+            <button type="button" class="quick-msg-btn text-xs font-semibold bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-3 py-2 rounded-xl transition" data-msg="">
+              Sem mensagem
+            </button>
+          </div>
+        </div>
+
+        <!-- PERSONALIZAÇÃO VISUAL DO QR GRATUITO -->
+        <div class="pt-4 border-t border-slate-100 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h2 class="text-sm font-bold text-slate-800">Personalização Visual (Opcional)</h2>
+            <span class="text-xs text-slate-500">Leitura garantida Nível H</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <span class="block text-xs font-semibold text-slate-600">Cor dos Pontos</span>
+              <div class="flex items-center gap-2">
+                <input type="color" id="qr-color" value="#0f766e" aria-label="Escolher cor do QR Code" class="w-11 h-11 rounded-xl border border-slate-300 cursor-pointer p-0.5 bg-white shrink-0" />
+                <button type="button" class="preset-color w-9 h-9 rounded-full bg-slate-900 border-2 border-white shadow ring-1 ring-slate-300" data-color="#0f172a" title="Preto"></button>
+                <button type="button" class="preset-color w-9 h-9 rounded-full bg-teal-700 border-2 border-white shadow ring-1 ring-slate-300" data-color="#0f766e" title="Verde Petróleo"></button>
+                <button type="button" class="preset-color w-9 h-9 rounded-full bg-emerald-600 border-2 border-white shadow ring-1 ring-slate-300" data-color="#059669" title="Verde WhatsApp"></button>
+                <button type="button" class="preset-color w-9 h-9 rounded-full bg-blue-900 border-2 border-white shadow ring-1 ring-slate-300" data-color="#1e3a8a" title="Azul Marinho"></button>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="block text-xs font-semibold text-slate-600">Estilo dos Pontos</span>
+              <div class="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl">
+                <button type="button" class="qr-style-btn active text-xs font-bold py-2.5 rounded-lg bg-white text-slate-900 shadow-sm" data-style="rounded">Arredondado</button>
+                <button type="button" class="qr-style-btn text-xs font-bold py-2.5 rounded-lg text-slate-600 hover:text-slate-900" data-style="square">Clássico</button>
+                <button type="button" class="qr-style-btn text-xs font-bold py-2.5 rounded-lg text-slate-600 hover:text-slate-900" data-style="dots">Pontos</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer py-1">
+              <input type="checkbox" id="use-wa-icon" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500" />
+              <span class="text-xs font-semibold text-slate-700">Incluir ícone oficial do WhatsApp no centro</span>
+            </label>
+
+            <div class="flex items-center gap-2">
+              <label for="custom-logo-input" class="cursor-pointer text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-xl transition">
+                + Usar minha logo
+              </label>
+              <input type="file" id="custom-logo-input" accept="image/*" class="hidden" />
+              <button type="button" id="remove-custom-logo" class="hidden text-xs font-bold text-rose-600 hover:underline py-2 px-1">
+                Remover
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRÉ-VISUALIZAÇÃO E DOWNLOAD GRATUITO -->
+      <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-8 flex flex-col items-center text-center space-y-5 lg:sticky lg:top-20">
+        <div class="w-full flex items-center justify-between text-xs text-slate-500">
+          <span class="font-bold text-slate-700 uppercase tracking-wider">Prévia Instantânea</span>
+          <span class="text-emerald-700 font-semibold">Alta Leitura</span>
+        </div>
+
+        <div class="w-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-5 flex items-center justify-center min-h-[260px]">
+          <div id="qr-canvas-container"></div>
+        </div>
+
+        <div class="w-full space-y-1.5 text-left">
+          <label for="generated-link" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Link Direto Oficial</label>
+          <div class="flex items-center gap-1.5">
+            <input
+              type="text"
+              id="generated-link"
+              readonly
+              class="w-full min-w-0 text-xs font-mono bg-slate-100 text-slate-700 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none"
+            />
+            <button type="button" id="copy-link-btn" class="px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shrink-0">
+              Copiar
+            </button>
+            <a id="test-link-btn" href="#" target="_blank" rel="noopener" class="px-3.5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl transition shrink-0">
+              Testar
+            </a>
+          </div>
+        </div>
+
+        <div class="w-full space-y-2.5 pt-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" id="download-png-btn" class="py-3.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-2xl shadow-sm transition">
+              Baixar QR Code PNG (600px)
+            </button>
+            <button type="button" id="download-hd-btn" class="py-3.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-2xl shadow-sm transition">
+              Alta Definição (1500px)
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <button type="button" id="download-svg-btn" class="py-3.5 px-3 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-2xl border border-slate-300 transition">
+              Baixar Vetor (SVG)
+            </button>
+            <button type="button" id="open-print-modal-btn" class="py-3.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs rounded-2xl border border-emerald-200 transition">
+              Placa Simples 10×15
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: PLACA DE BALCÃO 4-EM-1 PRO (TAMANHO 10CM x 15CM = 100mm x 150mm) -->
+    <section id="placa-pro" class="bg-gradient-to-br from-slate-900 via-slate-900 to-teal-950 rounded-3xl p-5 sm:p-10 text-white shadow-xl border border-slate-800">
+      <div class="space-y-6 pb-8 border-b border-white/10">
+        <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-5">
+          <div class="space-y-3 max-w-3xl">
+            <div class="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/35 text-amber-300 text-xs font-extrabold uppercase tracking-wider">
+              Placa QR Code para Balcão • Arquivo Digital 10cm × 15cm
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+              SUA EMPRESA INTEIRA EM UMA ÚNICA PLACA!
+            </h2>
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+              WhatsApp, Wi-Fi, Pix e Instagram em uma placa personalizada 10×15 cm. Monte online, confira a prévia com a sua marca e receba seu <strong class="text-white">arquivo digital pronto para imprimir</strong>.
+            </p>
+          </div>
+
+          <div class="shrink-0 bg-white/10 border border-amber-400/35 rounded-2xl px-5 py-4 text-left lg:text-right space-y-1">
+            <div class="text-xs font-bold uppercase tracking-wider text-amber-300">Pagamento único • Sem mensalidade</div>
+            <div class="text-3xl font-extrabold text-white" id="pro-price-display">R$ 9,90</div>
+            <div class="text-xs text-slate-300">Arquivo digital 600 DPI (10×15 cm)</div>
+          </div>
+        </div>
+
+        <!-- OS 4 RECURSOS E BENEFÍCIOS DA PLACA -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 flex items-start gap-3">
+            <span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 font-extrabold text-xs flex items-center justify-center shrink-0">01</span>
+            <div>
+              <h3 class="text-xs font-extrabold text-white">QR Code WhatsApp</h3>
+              <p class="text-xs text-slate-300 mt-0.5 leading-snug">Facilita o atendimento direto no balcão sem precisar digitar número.</p>
+            </div>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 flex items-start gap-3">
+            <span class="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-300 font-extrabold text-xs flex items-center justify-center shrink-0">02</span>
+            <div>
+              <h3 class="text-xs font-extrabold text-white">QR Code Wi-Fi</h3>
+              <p class="text-xs text-slate-300 mt-0.5 leading-snug">Facilita o acesso imediato à rede Wi-Fi para clientes e visitantes.</p>
+            </div>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 flex items-start gap-3">
+            <span class="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-300 font-extrabold text-xs flex items-center justify-center shrink-0">03</span>
+            <div>
+              <h3 class="text-xs font-extrabold text-white">QR Code Pix</h3>
+              <p class="text-xs text-slate-300 mt-0.5 leading-snug">Agiliza os pagamentos no caixa com leitura rápida da chave Pix.</p>
+            </div>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 flex items-start gap-3">
+            <span class="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-300 font-extrabold text-xs flex items-center justify-center shrink-0">04</span>
+            <div>
+              <h3 class="text-xs font-extrabold text-white">QR Code Instagram</h3>
+              <p class="text-xs text-slate-300 mt-0.5 leading-snug">Divulga o perfil do estabelecimento e conquista seguidores no atendimento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 pt-8 items-stretch">
+        <!-- CONFIGURADOR DA PLACA 10x15CM -->
+        <div class="lg:col-span-6 h-full bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-7 flex flex-col justify-between gap-6">
+          <!-- 1. IDENTIDADE DA EMPRESA -->
+          <div class="space-y-4 pb-6 border-b border-white/10">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-sm font-extrabold uppercase tracking-wider text-teal-300">1. Logo e Nome da Empresa</h3>
+              <span class="text-xs text-slate-300">Cores extraídas da logo</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label for="pro-company-input" class="block text-xs font-semibold text-slate-200 mb-1.5">Nome da Empresa (opcional)</label>
+                <input type="text" id="pro-company-input" placeholder="Ex: SubliBox" class="w-full rounded-xl bg-slate-950/70 border border-white/15 px-3.5 py-3 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400" />
+              </div>
+
+              <div>
+                <span class="block text-xs font-semibold text-slate-200 mb-1.5">Logo (define as cores da arte)</span>
+                <div class="flex items-center gap-2">
+                  <label for="pro-logo-input" class="flex-1 cursor-pointer text-center text-xs font-bold bg-teal-500/25 hover:bg-teal-500/35 text-teal-100 border border-teal-400/40 py-3 px-3 rounded-xl transition">
+                    Subir Logo
+                  </label>
+                  <input type="file" id="pro-logo-input" accept="image/*" class="hidden" />
+                  <button type="button" id="pro-clear-logo" class="hidden text-xs font-bold text-rose-300 hover:text-rose-200 px-3 py-3">
+                    Remover
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div class="flex flex-wrap gap-4">
+                <label class="inline-flex items-center gap-2 text-xs text-slate-200 cursor-pointer py-1">
+                  <input type="checkbox" id="pro-show-company" checked class="w-4 h-4 rounded text-teal-500" />
+                  Mostrar nome na arte
+                </label>
+                <label class="inline-flex items-center gap-2 text-xs text-slate-200 cursor-pointer py-1">
+                  <input type="checkbox" id="pro-show-logo" checked class="w-4 h-4 rounded text-teal-500" />
+                  Mostrar logo na arte
+                </label>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs text-slate-300">
+                <span>Paleta:</span>
+                <span id="swatch-primary" class="w-4 h-4 rounded-full border border-white/50 inline-block" style="background:#14456b"></span>
+                <span id="swatch-secondary" class="w-4 h-4 rounded-full border border-white/50 inline-block" style="background:#5eb5c9"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. DADOS DOS 4 QR CODES -->
+          <div class="flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <h3 class="text-sm font-extrabold uppercase tracking-wider text-teal-300">2. Dados dos 4 QR Codes</h3>
+                <button type="button" id="pro-wipe-all-btn" class="text-xs font-bold text-rose-300 hover:text-rose-200 bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/30 px-2.5 py-1 rounded-lg transition">
+                  Apagar dados da tela
+                </button>
+              </div>
+
+              <!-- GUIA RÁPIDO E VISUAL PARA PIX E WI-FI -->
+              <details class="bg-teal-950/70 border border-teal-400/30 rounded-xl p-3.5 text-xs text-slate-200">
+                <summary class="font-bold text-teal-200 cursor-pointer flex items-center justify-between gap-2 list-none">
+                  <span>Como pegar e recortar o QR Code do Pix e do Wi-Fi?</span>
+                  <span class="text-[11px] bg-teal-400/20 px-2 py-0.5 rounded-md text-teal-100 shrink-0">Ver passo a passo</span>
+                </summary>
+                <div class="mt-3 pt-3 border-t border-white/10 space-y-2.5 leading-relaxed">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div class="bg-slate-950/60 p-2.5 rounded-lg border border-white/10">
+                      <strong class="text-white block mb-0.5">1. Onde achar o QR Code Pix:</strong>
+                      Abra o app do seu banco → área <strong>Pix</strong> → <strong>Receber / Cobrar</strong> (ou <em>Meu QR Code Pix</em>) e tire um <strong>print da tela</strong>.
+                    </div>
+                    <div class="bg-slate-950/60 p-2.5 rounded-lg border border-white/10">
+                      <strong class="text-white block mb-0.5">2. Onde achar o QR Code Wi-Fi:</strong>
+                      No celular conectado ao Wi-Fi, toque na engrenagem da rede → <strong>Compartilhar / Código QR</strong> e tire um <strong>print da tela</strong>.
+                    </div>
+                  </div>
+                  <div class="bg-slate-950/60 p-2.5 rounded-lg border border-white/10">
+                    <strong class="text-amber-300 block mb-0.5">3. Como enviar e recortar sem erro:</strong>
+                    Toque em <strong>+ Subir Print</strong> abaixo, arraste a imagem e ajuste o zoom para deixar o quadrado do QR Code dentro da moldura verde <strong>com uma pequena margem branca ao redor</strong> (não corte os quadradinhos dos cantos).
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <!-- WI-FI -->
+            <div class="bg-slate-950/55 border border-white/15 rounded-xl p-4 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-xs font-extrabold text-white">QR 1: WI-FI (Print do celular/roteador)</span>
+                <label for="pro-wifi-file" id="pro-wifi-upload-label" class="cursor-pointer text-xs font-extrabold bg-teal-500/25 hover:bg-teal-500/35 text-teal-100 border border-teal-400/35 px-3.5 py-2 rounded-xl transition">
+                  + Subir Print Wi-Fi
+                </label>
+                <input type="file" id="pro-wifi-file" accept="image/*" class="hidden" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input type="text" id="pro-wifi-name" placeholder="Nome da rede (opcional)" autocomplete="off" class="rounded-xl bg-slate-900 border border-white/15 px-3.5 py-2.5 text-xs text-white placeholder-slate-400" />
+                <input type="text" id="pro-wifi-pass" placeholder="Senha visível (opcional)" autocomplete="off" class="rounded-xl bg-slate-900 border border-white/15 px-3.5 py-2.5 text-xs text-white placeholder-slate-400" />
+              </div>
+            </div>
+
+            <!-- PIX -->
+            <div class="bg-slate-950/55 border border-white/15 rounded-xl p-4 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-xs font-extrabold text-white">QR 2: PIX (Print do app do banco)</span>
+                <label for="pro-pix-file" id="pro-pix-upload-label" class="cursor-pointer text-xs font-extrabold bg-teal-500/25 hover:bg-teal-500/35 text-teal-100 border border-teal-400/35 px-3.5 py-2 rounded-xl transition">
+                  + Subir Print Pix
+                </label>
+                <input type="file" id="pro-pix-file" accept="image/*" class="hidden" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input type="text" id="pro-pix-holder" placeholder="Nome do Titular (opcional)" autocomplete="off" class="rounded-xl bg-slate-900 border border-white/15 px-3.5 py-2.5 text-xs text-white placeholder-slate-400" />
+                <input type="text" id="pro-pix-key" placeholder="Chave Pix visível (opcional)" autocomplete="off" class="rounded-xl bg-slate-900 border border-white/15 px-3.5 py-2.5 text-xs text-white placeholder-slate-400" />
+              </div>
+            </div>
+
+            <!-- WHATSAPP E INSTAGRAM -->
+            <div class="bg-slate-950/55 border border-white/15 rounded-xl p-4 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-xs font-extrabold text-white">QR 3 & 4: WhatsApp + Instagram</span>
+                <span class="text-xs font-semibold text-emerald-300">Gerados automaticamente</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input type="text" id="pro-insta-input" placeholder="Link ou @ do Instagram" autocomplete="off" class="rounded-xl bg-slate-900 border border-white/15 px-3.5 py-2.5 text-xs text-white placeholder-slate-400" />
+                <input type="text" id="pro-zap-label" placeholder="Texto abaixo do Zap (opcional)" autocomplete="off" class="rounded-xl bg-slate-900 border border-white/15 px-3.5 py-2.5 text-xs text-white placeholder-slate-400" />
+              </div>
+            </div>
+
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              Privacidade: senhas de Wi-Fi, chaves Pix e prints ficam <strong>apenas na memória temporária desta aba</strong> e não são gravados no dispositivo.
+            </p>
+          </div>
+        </div>
+
+        <!-- PRÉVIA 10CM X 15CM E CHECKOUT -->
+        <div class="lg:col-span-6 flex flex-col justify-between space-y-5">
+          <div class="bg-white/5 border border-white/15 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span class="font-bold text-slate-200 uppercase tracking-wider">Prévia Fiel • Tamanho 10cm × 15cm</span>
+              <span class="px-2.5 py-1 rounded-full bg-teal-500/25 text-teal-100 font-semibold">100mm × 150mm • 600 DPI</span>
+            </div>
+
+            <div class="relative rounded-xl overflow-hidden shadow-2xl border border-white/20 bg-slate-950/40 p-2">
+              <canvas id="pro-preview-canvas" width="2362" height="3543" class="rounded-lg shadow-lg bg-white"></canvas>
+            </div>
+
+            <p class="text-xs text-slate-300 text-center leading-relaxed">
+              Confira o alinhamento da sua logo, títulos e textos acima. Após confirmar o pagamento no servidor, os 4 QR Codes são liberados em <strong class="text-white">alta nitidez (600 DPI)</strong> sem desfoque.
+            </p>
+          </div>
+
+          <!-- CAIXA DE PAGAMENTO MERCADO PAGO -->
+          <div id="pro-locked-panel" class="bg-white text-slate-900 rounded-2xl p-5 sm:p-6 shadow-lg space-y-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md mb-1">
+                  Arquivo Digital para Imprimir • Entrega Imediata
+                </span>
+                <h4 class="font-extrabold text-base sm:text-lg text-slate-900">Desbloquear Arquivo Digital 10cm × 15cm</h4>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Você recebe o <strong>arquivo digital em alta resolução (600 DPI)</strong> pronto para imprimir em casa ou gráfica e colocar no display 10×15 cm (não enviamos placa física).
+                </p>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="text-xl font-extrabold text-emerald-700 block">R$ 9,90</span>
+                <span class="text-[11px] font-semibold text-slate-500">Pagamento único</span>
+              </div>
+            </div>
+
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl p-3">
+              <li class="flex items-center gap-1.5"><span class="text-emerald-600 font-extrabold">✓</span> Arte 4 em 1 (WhatsApp, Wi-Fi, Pix e Insta)</li>
+              <li class="flex items-center gap-1.5"><span class="text-emerald-600 font-extrabold">✓</span> Medida exata 10 × 15 cm (600 DPI)</li>
+              <li class="flex items-center gap-1.5"><span class="text-emerald-600 font-extrabold">✓</span> Pagamento único via Pix ou Cartão</li>
+              <li class="flex items-center gap-1.5"><span class="text-emerald-600 font-extrabold">✓</span> Validação automática via Mercado Pago</li>
+            </ul>
+
+            <button
+              type="button"
+              id="pro-pay-btn"
+              class="w-full py-4 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-extrabold text-sm sm:text-base rounded-xl shadow-md transition flex items-center justify-center gap-2"
+            >
+              Pagar R$ 9,90 (Pix ou Cartão) e Liberar Arquivo
+            </button>
+
+            <div class="pt-3 border-t border-slate-100">
+              <label for="pro-unlock-input" class="block text-xs font-bold text-slate-600 mb-1.5">Já pagou nesta aba? Digite o Nº da Operação / ID do Pagamento Mercado Pago:</label>
+              <div class="flex gap-2">
+                <input
+                  type="text"
+                  id="pro-unlock-input"
+                  inputmode="numeric"
+                  placeholder="Ex: 12345678901"
+                  class="flex-1 min-w-0 rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"
+                />
+                <button type="button" id="pro-unlock-btn" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shrink-0">
+                  Validar ID
+                </button>
+              </div>
+              <p class="text-xs text-slate-500 mt-2.5 leading-relaxed">
+                Precisa de ajuda com seu comprovante? <a href="https://wa.me/5585992657254?text=Ol%C3%A1!%20Fiz%20o%20pagamento%20da%20Placa%2010x15cm%20PRO%20e%20preciso%20de%20ajuda%20para%20validar.%20Segue%20o%20comprovante:" target="_blank" rel="noopener" class="font-bold text-emerald-700 hover:underline">Envie no nosso WhatsApp</a>.
+              </p>
+            </div>
+          </div>
+
+          <!-- PAINEL LIBERADO -->
+          <div id="pro-unlocked-panel" class="hidden bg-emerald-50 border-2 border-emerald-400 text-slate-900 rounded-2xl p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-200/70 px-2.5 py-1 rounded-md">
+                Placa 10×15cm Liberada!
+              </span>
+              <span class="text-xs font-semibold text-emerald-700">600 DPI • Sem marca d'água</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed">
+              Sua arte digital está pronta na medida exata de <strong>10 cm × 15 cm</strong>. Na janela da impressora, selecione <strong>"Tamanho Real (100%)"</strong> e teste a leitura dos 4 QR Codes com a câmera do celular antes de recortar.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              <button type="button" id="pro-download-png-btn" class="py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow transition">
+                Baixar Placa 10×15cm (PNG)
+              </button>
+              <button type="button" id="pro-print-a4-btn" class="py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl shadow transition">
+                Baixar PDF A4 (1 Página • 10×15cm)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: BANNER LOJA OFICIAL SUBLIBOX -->
+    <section class="bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950 rounded-3xl p-6 sm:p-10 text-white shadow-lg border border-slate-800">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2.5 max-w-2xl">
+          <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-300 bg-emerald-500/15 border border-emerald-400/25 px-3 py-1 rounded-full">
+            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+            </svg>
+            LOJA OFICIAL SUBLIBOX
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
+            Quer seu QR Code impresso em placas, canecas, ímãs ou adesivos personalizados?
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Na <strong class="text-white">SubliBox</strong> produzimos placas de balcão com acabamento profissional, displays personalizados com a sua marca, brindes corporativos e etiquetas prontas para o seu negócio.
+          </p>
+        </div>
+
+        <div class="shrink-0">
+          <a
+            id="sublibox-order-btn"
+            href="https://wa.me/5585992657254?text=Ol%C3%A1%20SubliBox!%20Vim%20pelo%20site%20Sublibox%20Qr%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20de%20plaquinhas%20ou%20produtos%20personalizados."
+            target="_blank"
+            rel="noopener"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm px-6 py-4 rounded-2xl shadow-lg shadow-emerald-950/50 transition"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+            </svg>
+            Encomendar com a SubliBox
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: VITRINE DE SUPORTES SHOPEE -->
+    <section id="acessorios" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-700 block mb-0.5">
+            INDICAÇÕES SUBLIBOX QR
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Suportes Recomendados para Balcão</h2>
+        </div>
+        <p class="text-xs font-medium text-slate-500">
+          Displays e placas de balcão exclusivamente no tamanho <strong class="text-slate-700">10×15cm</strong> (encaixe perfeito).
+        </p>
+      </div>
+      <div id="affiliate-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- SEÇÃO 5: PERGUNTAS FREQUENTES (FAQ) -->
+    <section id="faq" class="space-y-6 pt-2">
+      <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-white border border-emerald-200/80 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl">
+          <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
+            Transparência Total • Sem Pegadinhas
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Dúvidas Frequentes (FAQ)
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Diferente de outros sites que criam códigos com prazo de validade para cobrar assinatura mensal depois, o <strong>Gerador de QR Code WhatsApp da Sublibox Qr é 100% gratuito</strong>, sem cadastro e sem limite de escaneamentos.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 shrink-0 text-center">
+          <div class="bg-white border border-emerald-200/80 rounded-2xl px-3.5 py-2.5 shadow-sm">
+            <div class="text-sm font-extrabold text-emerald-700">R$ 0,00</div>
+            <div class="text-xs font-semibold text-slate-500">QR WhatsApp Grátis</div>
+          </div>
+          <div class="bg-white border border-emerald-200/80 rounded-2xl px-3.5 py-2.5 shadow-sm">
+            <div class="text-sm font-extrabold text-emerald-700">Vitalício</div>
+            <div class="text-xs font-semibold text-slate-500">Nunca expira</div>
+          </div>
+          <div class="col-span-2 sm:col-span-1 bg-white border border-emerald-200/80 rounded-2xl px-3.5 py-2.5 shadow-sm">
+            <div class="text-sm font-extrabold text-emerald-700">Ilimitado</div>
+            <div class="text-xs font-semibold text-slate-500">Sem cadastro</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
+        <details class="group bg-white rounded-2xl border-2 border-emerald-200 p-5 shadow-sm open:ring-2 open:ring-emerald-500/20 transition" open>
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>1. Por que este gerador é 100% gratuito enquanto outros sites cobram?</span>
+            <span class="w-7 h-7 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            Muitos sites na internet criam <strong>QR Codes dinâmicos</strong> que passam por um servidor pago intermediário. Após 7 ou 14 dias de teste, eles bloqueiam o seu código e exigem assinatura mensal para ele voltar a funcionar. Aqui o gerador de QR Code do WhatsApp é <strong>100% gratuito para sempre</strong>, sem cadastro, sem limite de escaneamentos e sem pegadinhas.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition" open>
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>2. O QR Code do WhatsApp expira ou deixa de funcionar com o tempo?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Nunca expira.</strong> O código grava diretamente o endereço oficial do WhatsApp (<code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">https://wa.me/55...</code>) dentro dos próprios pontos da imagem, sem depender de nenhum servidor externo. Enquanto o seu número existir no WhatsApp, o QR Code funcionará normalmente.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>3. Preciso criar conta ou cadastrar e-mail para baixar o QR Code?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Não precisa de nenhum cadastro.</strong> Basta digitar seu número, personalizar a cor ou estilo se desejar e clicar para baixar imediatamente em <strong>PNG (600px)</strong>, <strong>Alta Definição (1500px)</strong>, <strong>Vetor (SVG)</strong> ou gerar a <strong>Placa Simples 10×15cm</strong> totalmente de graça.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>4. Posso colocar minha logo no centro sem estragar a leitura da câmera?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Sim!</strong> Utilizamos correção de erro <strong>Nível H (30%)</strong>, o padrão mais alto de redundância para QR Codes. Isso garante que a câmera de qualquer celular (Android ou iPhone) leia o código instantaneamente mesmo com o ícone do WhatsApp ou a logo da sua empresa no centro.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>5. A Placa 4-em-1 PRO (10cm × 15cm) é um arquivo digital ou placa física?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            É um <strong>arquivo digital personalizado para imprimir</strong> (600 DPI, medida exata <strong>10cm × 15cm</strong>) reunindo <strong>WhatsApp + Wi-Fi + Pix + Instagram</strong> com as cores extraídas da sua logo. Você monta online, visualiza antes de comprar e paga apenas uma <strong>taxa única de R$ 9,90</strong> (sem mensalidade), com download liberado após validação do pagamento no servidor.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>6. Como recorto o QR Code do Pix e do Wi-Fi para colocar na placa?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            Tire um print da tela do QR Code no aplicativo do seu banco (Pix) ou nas configurações do Wi-Fi no celular e clique em <strong>"+ Subir Print"</strong> na área da placa. O site abre uma janela de recorte quadrado com zoom para você enquadrar o QR Code preservando uma pequena borda branca ao redor.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>7. Qual papel e tamanho devo usar para imprimir a placa 10×15cm?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            Recomendamos imprimir em <strong>Papel Fotográfico Glossy 180g</strong> para garantir contraste nítido nos 4 QR Codes. Ao clicar em <strong>"Baixar PDF A4 (1 Página • 10×15cm)"</strong>, você recebe um PDF limpo de página única na medida exata de <strong>100 × 150 mm</strong> para encaixar nos displays de acrílico 10×15 cm. Na impressão, basta manter <strong>"Tamanho Real (100%)"</strong> e recortar na linha fina ao redor.
+          </p>
+        </details>
+
+        <details class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 p-5 shadow-sm transition">
+          <summary class="font-extrabold text-sm sm:text-base text-slate-900 cursor-pointer flex items-center justify-between gap-3 list-none">
+            <span>8. Meus dados, senha Wi-Fi, chave Pix ou prints ficam salvos no dispositivo ou servidor?</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="text-xs sm:text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+            <strong>Não.</strong> Nenhum print, senha de Wi-Fi ou chave Pix é enviado ao servidor ou gravado permanentemente no navegador. Os dados ficam apenas temporariamente na sessão da aba enquanto você monta a placa e são descartados ao fechar a aba ou clicar em <strong>"Apagar dados da tela"</strong>.
+          </p>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <span>© <span id="current-year"></span> <strong class="text-slate-800">Sublibox Qr</strong> • Gerador QR Code WhatsApp Permanente & Placa 4 em 1</span>
+      <a id="footer-insta" href="https://instagram.com/lojasublibox" target="_blank" rel="noopener" class="font-bold text-emerald-700 hover:underline">
+        @lojasublibox no Instagram
+      </a>
+    </div>
+  </footer>
+
+  <!-- MODAL DE RECORTE QUADRADO (CROPPER PARA PRINT PIX / WI-FI) -->
+  <div id="cropper-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <h3 id="cropper-title" class="font-extrabold text-slate-900 text-base">Recortar QR Code do Print</h3>
+        <button type="button" id="cropper-close" class="w-9 h-9 rounded-full hover:bg-slate-100 text-slate-600 font-bold" aria-label="Fechar recorte">✕</button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Arraste a imagem com o dedo ou mouse e ajuste o zoom para enquadrar o quadrado do QR Code dentro da moldura verde, deixando uma <strong>pequena borda branca</strong> nas 4 laterais.
+      </p>
+
+      <div class="relative w-full max-w-[320px] mx-auto aspect-square bg-slate-900 rounded-2xl overflow-hidden cursor-move touch-none select-none border border-slate-200" id="cropper-stage">
+        <canvas id="cropper-canvas" width="400" height="400" class="w-full h-full"></canvas>
+      </div>
+
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+          <span>Zoom da imagem</span>
+          <span id="cropper-zoom-label">100%</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <button type="button" id="cropper-zoom-out" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-base shrink-0" aria-label="Diminuir zoom">−</button>
+          <input type="range" id="cropper-zoom" min="0.5" max="3.5" step="0.05" value="1" class="w-full accent-emerald-600 cursor-pointer" />
+          <button type="button" id="cropper-zoom-in" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-base shrink-0" aria-label="Aumentar zoom">+</button>
+        </div>
+      </div>
+
+      <div class="flex gap-2.5 pt-1">
+        <button type="button" id="cropper-cancel" class="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+          Cancelar
+        </button>
+        <button type="button" id="cropper-confirm" class="flex-1 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow transition">
+          Recortar e Aplicar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PLACA SIMPLES GRATUITA (10x15cm) -->
+  <div id="print-modal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <h3 class="font-extrabold text-slate-900 text-lg">Placa Simples WhatsApp (10×15cm)</h3>
+        <button type="button" id="close-print-modal" class="w-9 h-9 rounded-full hover:bg-slate-100 text-slate-600 font-bold" aria-label="Fechar placa simples">✕</button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label for="plate-title-input" class="block text-xs font-bold text-slate-600 mb-1">Título da Placa</label>
+          <input type="text" id="plate-title-input" value="Fale Conosco no WhatsApp" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-xs font-semibold" />
+        </div>
+        <div>
+          <label for="plate-sub-input" class="block text-xs font-bold text-slate-600 mb-1">Subtítulo / Instrução</label>
+          <input type="text" id="plate-sub-input" value="Aponte a câmera do seu celular para iniciar o atendimento" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-xs font-semibold" />
+        </div>
+      </div>
+
+      <div class="bg-slate-100 p-4 rounded-2xl flex justify-center">
+        <canvas id="simple-plate-canvas" width="1200" height="1800" class="w-48 sm:w-52 h-auto rounded-xl shadow bg-white"></canvas>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <button type="button" id="download-simple-plate-btn" class="py-3.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow transition">
+          Baixar Placa PNG (1200×1800px)
+        </button>
+        <button type="button" id="print-simple-plate-btn" class="py-3.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl shadow transition">
+          Imprimir em Folha A4
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÁREA OCULTA PARA IMPRESSÃO -->
+  <div id="print-area" class="hidden"></div>
+
+  <!-- TOAST DE FEEDBACK -->
+  <div id="toast" class="fixed bottom-5 right-5 left-5 sm:left-auto z-50 translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 text-white text-xs sm:text-sm font-semibold px-4 py-3 rounded-2xl shadow-xl text-center sm:text-left">
+    <span id="toast-msg">Pronto!</span>
+  </div>
+
+  <script>
+    const WHATSAPP_SVG_DATA_URI = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="56" fill="#25D366"/>
+        <path fill="#FFFFFF" d="M60.2 26C41.4 26 26.2 41.2 26.2 60c0 6 1.6 11.9 4.5 17.1L26 94.5l17.9-4.7c5 2.7 10.6 4.2 16.3 4.2 18.8 0 34-15.2 34-34S79 26 60.2 26zm19.8 48.1c-.8 2.3-4.8 4.4-6.7 4.7-1.7.3-3.9.4-6.3-.4-1.5-.5-3.4-1.1-5.8-2.2-10.2-4.4-16.8-14.7-17.3-15.4-.5-.7-4.1-5.5-4.1-10.5s2.6-7.4 3.5-8.4c.9-1 2-1.3 2.7-1.3.7 0 1.3 0 1.9.1.6 0 1.4-.2 2.2 1.7.8 2 2.8 6.8 3 7.3.3.5.4 1.1.1 1.7-.3.7-.5 1.1-1 1.7-.5.6-1 1.3-1.5 1.8-.5.5-1 1-.4 2 .6 1 2.6 4.3 5.6 7 3.9 3.4 7.1 4.5 8.1 5 .9.5 1.5.4 2.1-.2.6-.7 2.4-2.8 3.1-3.8.7-1 1.3-.8 2.2-.5.9.3 5.7 2.7 6.7 3.2 1 .5 1.6.7 1.9 1.1.2.4.2 2.3-.6 4.6z"/>
+      </svg>
+    `);
+
+    const freeState = {
+      color: "#0f766e",
+      style: "rounded",
+      useWaIcon: true,
+      customLogoDataUrl: null
+    };
+
+    const proState = {
+      unlocked: false,
+      validatedPaymentId: null,
+      orderRef: null,
+      sessionToken: null,
+      downloadGrant: null,
+      approvedCustomizationHash: null,
+      companyName: "",
+      showCompany: true,
+      showLogo: true,
+      logoImg: null,
+      primaryColor: "#14456b",
+      secondaryColor: "#5eb5c9",
+      wifiImg: null,
+      wifiName: "",
+      wifiPass: "",
+      pixImg: null,
+      pixHolder: "",
+      pixKey: "",
+      instaHandle: "",
+      zapLabel: ""
+    };
+
+    let qrCodeInstance = null;
+
+    // Limpeza proativa de possíveis dados legados no localStorage
+    try {
+      localStorage.removeItem("sublibox_pro_6x4_draft");
+      localStorage.removeItem("sublibox_pro_6x4_unlocked");
+      localStorage.removeItem("sublibox_pro_10x15_draft");
+      localStorage.removeItem("sublibox_pro_10x15_unlocked");
+    } catch (e) {}
+
+    function showToast(text) {
+      const el = document.getElementById("toast");
+      const msgEl = document.getElementById("toast-msg");
+      if (!el || !msgEl) return;
+      msgEl.textContent = text;
+      el.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => el.classList.add("translate-y-20", "opacity-0"), 2800);
+    }
+
+    function cleanDigits(str) {
+      return (str || "").replace(/\D/g, "");
+    }
+
+    function formatBrPhone(val) {
+      const d = cleanDigits(val).slice(0, 11);
+      if (d.length <= 2) return d;
+      if (d.length <= 6) return `${d.slice(0, 2)} ${d.slice(2)}`;
+      if (d.length <= 10) return `${d.slice(0, 2)} ${d.slice(2, 6)}-${d.slice(6)}`;
+      return `${d.slice(0, 2)} ${d.slice(2, 7)}-${d.slice(7)}`;
+    }
+
+    function buildWhatsAppLink() {
+      const phoneInput = document.getElementById("wa-phone");
+      const msgInput = document.getElementById("wa-message");
+      const badge = document.getElementById("phone-badge");
+
+      const digits = cleanDigits(phoneInput ? phoneInput.value : "");
+      if (badge) {
+        if (digits.length === 10 || digits.length === 11 || digits.length >= 12) {
+          badge.textContent = "Número válido";
+          badge.className = "text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full shrink-0";
+        } else {
+          badge.textContent = "Digite DDD + número";
+          badge.className = "text-xs font-semibold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full shrink-0";
+        }
+      }
+
+      const fullNumber = digits.startsWith("55") && digits.length >= 12 ? digits : "55" + digits;
+      const msg = msgInput ? msgInput.value.trim() : "";
+      const base = `https://wa.me/${fullNumber || "5585999990000"}`;
+      return msg ? `${base}?text=${encodeURIComponent(msg)}` : base;
+    }
+
+    function getCurrentCenterImage() {
+      if (freeState.customLogoDataUrl) return freeState.customLogoDataUrl;
+      if (freeState.useWaIcon) return WHATSAPP_SVG_DATA_URI;
+      return undefined;
+    }
+
+    function getMainQROptions(size = 520) {
+      const link = buildWhatsAppLink();
+      const dotsType = freeState.style === "dots" ? "dots" : (freeState.style === "square" ? "square" : "rounded");
+      const cornerSquareType = freeState.style === "square" ? "square" : "extra-rounded";
+      const cornerDotType = freeState.style === "square" ? "square" : "dot";
+
+      return {
+        width: size,
+        height: size,
+        type: "canvas",
+        data: link,
+        image: getCurrentCenterImage(),
+        margin: Math.round(size * 0.02),
+        qrOptions: { errorCorrectionLevel: "H" },
+        imageOptions: {
+          hideBackgroundDots: true,
+          imageSize: 0.34,
+          margin: Math.max(4, Math.round(size * 0.012)),
+          crossOrigin: "anonymous"
+        },
+        dotsOptions: { color: freeState.color, type: dotsType },
+        backgroundOptions: { color: "#ffffff" },
+        cornersSquareOptions: { color: freeState.color, type: cornerSquareType },
+        cornersDotOptions: { color: freeState.color, type: cornerDotType }
+      };
+    }
+
+    function updateMainQR() {
+      const link = buildWhatsAppLink();
+      const genLinkInput = document.getElementById("generated-link");
+      const testLinkBtn = document.getElementById("test-link-btn");
+      if (genLinkInput) genLinkInput.value = link;
+      if (testLinkBtn) testLinkBtn.href = link;
+
+      const container = document.getElementById("qr-canvas-container");
+      if (container) {
+        container.innerHTML = "";
+        if (typeof QRCodeStyling !== "undefined") {
+          qrCodeInstance = new QRCodeStyling(getMainQROptions(520));
+          qrCodeInstance.append(container);
+        } else {
+          container.innerHTML = '<div class="text-xs text-slate-400 p-4">Carregando gerador...</div>';
+          setTimeout(updateMainQR, 300);
+          return;
+        }
+      }
+      renderProBoard();
+    }
+
+    // RASCUNHO ESTRITAMENTE VOLÁTIL (APENAS SESSIONSTORAGE DURANTE REDIRECIONAMENTO DE CHECKOUT)
+    async function computeBoardCustomizationHash() {
+      const canonical = JSON.stringify({
+        phone: cleanDigits(document.getElementById("wa-phone").value),
+        message: document.getElementById("wa-message").value,
+        ...Object.fromEntries(["companyName","showCompany","showLogo","primaryColor","secondaryColor","wifiName","wifiPass","pixHolder","pixKey","instaHandle","zapLabel"].map(k => [k, proState[k]])),
+        logo: proState.logoImg?.src || "", wifi: proState.wifiImg?.src || "", pix: proState.pixImg?.src || ""
+      });
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(canonical));
+      return Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2,"0")).join("");
+    }
+
+    function saveVolatileCheckoutState() {
+      try {
+        const snapshot = {
+          orderRef: proState.orderRef,
+          sessionToken: proState.sessionToken,
+          validatedPaymentId: proState.validatedPaymentId,
+          phone: document.getElementById("wa-phone").value,
+          message: document.getElementById("wa-message").value,
+          companyName: proState.companyName,
+          showCompany: proState.showCompany,
+          showLogo: proState.showLogo,
+          primaryColor: proState.primaryColor,
+          secondaryColor: proState.secondaryColor,
+          wifiName: proState.wifiName,
+          wifiPass: proState.wifiPass,
+          pixHolder: proState.pixHolder,
+          pixKey: proState.pixKey,
+          instaHandle: proState.instaHandle,
+          zapLabel: proState.zapLabel,
+          logoSrc: proState.logoImg ? proState.logoImg.src : null,
+          wifiSrc: proState.wifiImg ? proState.wifiImg.src : null,
+          pixSrc: proState.pixImg ? proState.pixImg.src : null
+        };
+        sessionStorage.setItem("sublibox_volatile_checkout", JSON.stringify(snapshot));
+      } catch (e) { throw new Error("Não foi possível guardar a placa nesta aba. Reduza o tamanho da logo e tente novamente."); }
+    }
+
+    function clearVolatileStorage() {
+      try {
+        sessionStorage.removeItem("sublibox_volatile_checkout");
+        sessionStorage.removeItem("sublibox_pro_session_token");
+      } catch (e) {}
+    }
+
+    function loadImageAsync(src) {
+      return new Promise((resolve) => {
+        if (!src) return resolve(null);
+        const im = new Image();
+        im.onload = () => resolve(im);
+        im.onerror = () => resolve(null);
+        im.src = src;
+      });
+    }
+
+    async function restoreVolatileCheckoutState() {
+      try {
+        const raw = sessionStorage.getItem("sublibox_volatile_checkout");
+        if (!raw) return;
+        const d = JSON.parse(raw);
+        proState.orderRef = d.orderRef || null;
+        proState.sessionToken = d.sessionToken || null;
+        proState.validatedPaymentId = d.validatedPaymentId || null;
+        if (d.phone !== undefined) document.getElementById("wa-phone").value = d.phone;
+        if (d.message !== undefined) {
+          document.getElementById("wa-message").value = d.message;
+          document.getElementById("msg-counter").textContent = `${d.message.length}/250`;
+        }
+        if (d.companyName !== undefined) {
+          proState.companyName = d.companyName;
+          document.getElementById("pro-company-input").value = d.companyName;
+        }
+        if (d.showCompany !== undefined) {
+          proState.showCompany = d.showCompany;
+          document.getElementById("pro-show-company").checked = d.showCompany;
+        }
+        if (d.showLogo !== undefined) {
+          proState.showLogo = d.showLogo;
+          document.getElementById("pro-show-logo").checked = d.showLogo;
+        }
+        if (d.primaryColor) proState.primaryColor = d.primaryColor;
+        if (d.secondaryColor) proState.secondaryColor = d.secondaryColor;
+        updateSwatches();
+
+        if (d.wifiName !== undefined) {
+          proState.wifiName = d.wifiName;
+          document.getElementById("pro-wifi-name").value = d.wifiName;
+        }
+        if (d.wifiPass !== undefined) {
+          proState.wifiPass = d.wifiPass;
+          document.getElementById("pro-wifi-pass").value = d.wifiPass;
+        }
+        if (d.pixHolder !== undefined) {
+          proState.pixHolder = d.pixHolder;
+          document.getElementById("pro-pix-holder").value = d.pixHolder;
+        }
+        if (d.pixKey !== undefined) {
+          proState.pixKey = d.pixKey;
+          document.getElementById("pro-pix-key").value = d.pixKey;
+        }
+        if (d.instaHandle !== undefined) {
+          proState.instaHandle = d.instaHandle;
+          document.getElementById("pro-insta-input").value = d.instaHandle;
+        }
+        if (d.zapLabel !== undefined) {
+          proState.zapLabel = d.zapLabel;
+          document.getElementById("pro-zap-label").value = d.zapLabel;
+        }
+
+        if (d.logoSrc) {
+          proState.logoImg = await loadImageAsync(d.logoSrc);
+          if (proState.logoImg) document.getElementById("pro-clear-logo").classList.remove("hidden");
+        }
+        if (d.wifiSrc) {
+          proState.wifiImg = await loadImageAsync(d.wifiSrc);
+          if (proState.wifiImg) document.getElementById("pro-wifi-upload-label").textContent = "✓ Print Wi-Fi OK";
+        }
+        if (d.pixSrc) {
+          proState.pixImg = await loadImageAsync(d.pixSrc);
+          if (proState.pixImg) document.getElementById("pro-pix-upload-label").textContent = "✓ Print Pix OK";
+        }
+      } catch (e) {}
+    }
+
+    function wipeAllSensitiveData() {
+      Object.assign(proState, {unlocked:false, validatedPaymentId:null, orderRef:null, sessionToken:null, downloadGrant:null, approvedCustomizationHash:null});
+      document.getElementById("pro-locked-panel").classList.remove("hidden");
+      document.getElementById("pro-unlocked-panel").classList.add("hidden");
+      document.getElementById("pro-price-display").textContent = "R$ 9,90";
+      proState.companyName = "";
+      proState.logoImg = null;
+      proState.primaryColor = "#14456b";
+      proState.secondaryColor = "#5eb5c9";
+      proState.wifiImg = null;
+      proState.wifiName = "";
+      proState.wifiPass = "";
+      proState.pixImg = null;
+      proState.pixHolder = "";
+      proState.pixKey = "";
+      proState.instaHandle = "";
+      proState.zapLabel = "";
+
+      [
+        "pro-company-input",
+        "pro-wifi-name",
+        "pro-wifi-pass",
+        "pro-pix-holder",
+        "pro-pix-key",
+        "pro-insta-input",
+        "pro-zap-label",
+        "pro-logo-input",
+        "pro-wifi-file",
+        "pro-pix-file"
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+
+      document.getElementById("pro-clear-logo").classList.add("hidden");
+      document.getElementById("pro-wifi-upload-label").textContent = "+ Subir Print Wi-Fi";
+      document.getElementById("pro-pix-upload-label").textContent = "+ Subir Print Pix";
+      updateSwatches();
+      clearVolatileStorage();
+      renderProBoard();
+      showToast("Todos os dados e prints foram apagados da memória.");
+    }
+
+    function updateSwatches() {
+      const s1 = document.getElementById("swatch-primary");
+      const s2 = document.getElementById("swatch-secondary");
+      if (s1) s1.style.background = proState.primaryColor;
+      if (s2) s2.style.background = proState.secondaryColor;
+    }
+
+    function extractColorsFromImage(img) {
+      try {
+        const c = document.createElement("canvas");
+        const ctx = c.getContext("2d");
+        c.width = 64;
+        c.height = 64;
+        ctx.drawImage(img, 0, 0, 64, 64);
+        const data = ctx.getImageData(0, 0, 64, 64).data;
+
+        const buckets = {};
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+          if (a < 180) continue;
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          if (max > 242 && min > 235) continue;
+          if (max < 22) continue;
+
+          const kr = Math.round(r / 24) * 24;
+          const kg = Math.round(g / 24) * 24;
+          const kb = Math.round(b / 24) * 24;
+          const key = `${kr},${kg},${kb}`;
+          const sat = max - min;
+          buckets[key] = (buckets[key] || 0) + 1 + sat * 0.04;
+        }
+
+        const sorted = Object.entries(buckets).sort((a, b) => b[1] - a[1]);
+        if (sorted.length > 0) {
+          const [r1, g1, b1] = sorted[0][0].split(",").map(Number);
+          const pR = Math.max(15, Math.round(r1 * 0.72));
+          const pG = Math.max(15, Math.round(g1 * 0.72));
+          const pB = Math.max(15, Math.round(b1 * 0.72));
+          proState.primaryColor = `rgb(${pR}, ${pG}, ${pB})`;
+
+          if (sorted.length > 1) {
+            const [r2, g2, b2] = sorted[1][0].split(",").map(Number);
+            proState.secondaryColor = `rgb(${r2}, ${g2}, ${b2})`;
+          } else {
+            const sR = Math.min(235, Math.round(r1 + (255 - r1) * 0.34));
+            const sG = Math.min(235, Math.round(g1 + (255 - g1) * 0.34));
+            const sB = Math.min(235, Math.round(b1 + (255 - b1) * 0.34));
+            proState.secondaryColor = `rgb(${sR}, ${sG}, ${sB})`;
+          }
+          updateSwatches();
+        }
+      } catch (e) {}
+    }
+
+    function createQRCanvasPromise(dataText, colorHex, centerIconUrl) {
+      return new Promise((resolve) => {
+        if (typeof QRCodeStyling === "undefined") {
+          resolve(null);
+          return;
+        }
+        const tempDiv = document.createElement("div");
+        tempDiv.style.position = "fixed";
+        tempDiv.style.left = "-9999px";
+        tempDiv.style.top = "-9999px";
+        document.body.appendChild(tempDiv);
+
+        const qr = new QRCodeStyling({
+          width: 600,
+          height: 600,
+          type: "canvas",
+          data: dataText,
+          image: centerIconUrl || undefined,
+          margin: 4,
+          qrOptions: { errorCorrectionLevel: "H" },
+          imageOptions: { hideBackgroundDots: true, imageSize: 0.3, margin: 4 },
+          dotsOptions: { color: colorHex, type: "rounded" },
+          backgroundOptions: { color: "#ffffff" },
+          cornersSquareOptions: { color: colorHex, type: "extra-rounded" },
+          cornersDotOptions: { color: colorHex, type: "dot" }
+        });
+        qr.append(tempDiv);
+
+        let attempts = 0;
+        const checkReady = () => {
+          attempts++;
+          const canvas = tempDiv.querySelector("canvas");
+          if (canvas && canvas.width > 0 && attempts >= 3) {
+            tempDiv.remove();
+            resolve(canvas);
+          } else if (attempts >= 15) {
+            tempDiv.remove();
+            resolve(canvas || null);
+          } else {
+            setTimeout(checkReady, 50);
+          }
+        };
+        setTimeout(checkReady, 60);
+      });
+    }
+
+    function roundRectPath(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function drawPinFrame(ctx, x, y, size, fillColor, strokeColor) {
+      const r = size * 0.14;
+      const tailW = size * 0.16;
+      const tailH = size * 0.075;
+
+      ctx.save();
+      ctx.fillStyle = fillColor;
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + size - r, y);
+      ctx.quadraticCurveTo(x + size, y, x + size, y + r);
+      ctx.lineTo(x + size, y + size - r);
+      ctx.quadraticCurveTo(x + size, y + size, x + size - r, y + size);
+      ctx.lineTo(x + size / 2 + tailW / 2, y + size);
+      ctx.lineTo(x + size / 2, y + size + tailH);
+      ctx.lineTo(x + size / 2 - tailW / 2, y + size);
+      ctx.lineTo(x + r, y + size);
+      ctx.quadraticCurveTo(x, y + size, x, y + size - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+      ctx.fill();
+
+      const pad = size * 0.11;
+      const innerSize = size - pad * 2;
+      const ir = innerSize * 0.11;
+      ctx.fillStyle = "#ffffff";
+      roundRectPath(ctx, x + pad, y + pad, innerSize, innerSize, ir);
+      ctx.fill();
+
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = Math.max(4, size * 0.016);
+      ctx.lineCap = "round";
+      const cOff = pad * 0.55;
+      const cLen = size * 0.16;
+
+      ctx.beginPath();
+      ctx.moveTo(x + cOff, y + cOff + cLen);
+      ctx.lineTo(x + cOff, y + cOff + 10);
+      ctx.quadraticCurveTo(x + cOff, y + cOff, x + cOff + 10, y + cOff);
+      ctx.lineTo(x + cOff + cLen, y + cOff);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + size - cOff - cLen, y + cOff);
+      ctx.lineTo(x + size - cOff - 10, y + cOff);
+      ctx.quadraticCurveTo(x + size - cOff, y + cOff, x + size - cOff, y + cOff + 10);
+      ctx.lineTo(x + size - cOff, y + cOff + cLen);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + cOff, y + size - cOff - cLen);
+      ctx.lineTo(x + cOff, y + size - cOff - 10);
+      ctx.quadraticCurveTo(x + cOff, y + size - cOff, x + cOff + 10, y + size - cOff);
+      ctx.lineTo(x + cOff + cLen, y + size - cOff);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + size - cOff - cLen, y + size - cOff);
+      ctx.lineTo(x + size - cOff - 10, y + size - cOff);
+      ctx.quadraticCurveTo(x + size - cOff, y + size - cOff, x + size - cOff, y + size - cOff - 10);
+      ctx.lineTo(x + size - cOff, y + size - cOff - cLen);
+      ctx.stroke();
+
+      ctx.restore();
+      return {
+        qrX: x + pad + innerSize * 0.05,
+        qrY: y + pad + innerSize * 0.05,
+        qrSize: innerSize * 0.90
+      };
+    }
+
+    // RENDERIZAÇÃO DA PLACA 10CM x 15CM (RETRATO 2362x3543px • GRADE 2x2)
+    async function renderProBoard(targetCanvas = null, forceClean = false) {
+      const canvas = targetCanvas || document.getElementById("pro-preview-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width;
+      const H = canvas.height;
+
+      const primary = proState.primaryColor;
+      const secondary = proState.secondaryColor;
+      const isProtected = !(proState.unlocked && proState.validatedPaymentId && forceClean);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, W, H);
+
+      // Ornamentos dos cantos proporcionais ao formato retrato 10x15cm
+      ctx.save();
+      ctx.fillStyle = secondary;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(W * 0.24, 0);
+      ctx.quadraticCurveTo(W * 0.11, H * 0.085, 0, H * 0.155);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = primary;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(W * 0.18, 0);
+      ctx.quadraticCurveTo(W * 0.08, H * 0.065, 0, H * 0.12);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = secondary;
+      ctx.beginPath();
+      ctx.moveTo(W, H);
+      ctx.lineTo(W * 0.76, H);
+      ctx.quadraticCurveTo(W * 0.89, H * 0.915, W, H * 0.845);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = primary;
+      ctx.beginPath();
+      ctx.moveTo(W, H);
+      ctx.lineTo(W * 0.82, H);
+      ctx.quadraticCurveTo(W * 0.92, H * 0.935, W, H * 0.88);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      function drawFittedMainTitle(text, centerY, baseSize) {
+        ctx.save();
+        let fontSize = baseSize;
+        const maxTitleWidth = W * 0.82;
+        ctx.font = `700 ${Math.round(fontSize)}px 'Oswald', sans-serif`;
+        while (ctx.measureText(text).width > maxTitleWidth && fontSize > 48) {
+          fontSize -= 2;
+          ctx.font = `700 ${Math.round(fontSize)}px 'Oswald', sans-serif`;
+        }
+        ctx.fillStyle = primary;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(text, W / 2, centerY);
+        ctx.restore();
+      }
+
+      const hasLogo = proState.showLogo && proState.logoImg;
+      const hasName = proState.showCompany && proState.companyName.trim().length > 0;
+      let gridStartY = H * 0.21;
+
+      if (hasLogo || hasName) {
+        ctx.save();
+        const topY = H * 0.045;
+        if (hasLogo && hasName) {
+          const logoH = H * 0.065;
+          const ratio = proState.logoImg.width / proState.logoImg.height;
+          const logoW = Math.min(W * 0.24, logoH * ratio);
+          let brandFontSize = Math.round(H * 0.032);
+          const brandText = proState.companyName.trim().toUpperCase();
+          ctx.font = `800 ${brandFontSize}px 'Plus Jakarta Sans', sans-serif`;
+          while (logoW + 28 + ctx.measureText(brandText).width > W * 0.76 && brandFontSize > 34) {
+            brandFontSize -= 2;
+            ctx.font = `800 ${brandFontSize}px 'Plus Jakarta Sans', sans-serif`;
+          }
+          const textW = ctx.measureText(brandText).width;
+          const totalW = logoW + 28 + textW;
+          const startX = (W - totalW) / 2;
+
+          ctx.drawImage(proState.logoImg, startX, topY, logoW, logoH);
+          ctx.fillStyle = primary;
+          ctx.textBaseline = "middle";
+          ctx.fillText(brandText, startX + logoW + 28, topY + logoH / 2);
+        } else if (hasLogo) {
+          const logoH = H * 0.072;
+          const ratio = proState.logoImg.width / proState.logoImg.height;
+          const logoW = Math.min(W * 0.36, logoH * ratio);
+          ctx.drawImage(proState.logoImg, (W - logoW) / 2, topY - 4, logoW, logoH);
+        } else if (hasName) {
+          let brandFontSize = Math.round(H * 0.035);
+          const brandText = proState.companyName.trim().toUpperCase();
+          ctx.font = `800 ${brandFontSize}px 'Plus Jakarta Sans', sans-serif`;
+          while (ctx.measureText(brandText).width > W * 0.78 && brandFontSize > 36) {
+            brandFontSize -= 2;
+            ctx.font = `800 ${brandFontSize}px 'Plus Jakarta Sans', sans-serif`;
+          }
+          ctx.fillStyle = primary;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(brandText, W / 2, topY + H * 0.034);
+        }
+        ctx.restore();
+
+        drawFittedMainTitle("ESCANEIE OS QR CODES ABAIXO:", H * 0.155, H * 0.044);
+        gridStartY = H * 0.205;
+      } else {
+        drawFittedMainTitle("ESCANEIE OS QR CODES ABAIXO:", H * 0.115, H * 0.050);
+        gridStartY = H * 0.180;
+      }
+
+      const waLink = buildWhatsAppLink();
+      const rawInsta = proState.instaHandle.trim();
+      const instaClean = rawInsta
+        ? (rawInsta.startsWith("http") ? rawInsta : `https://instagram.com/${rawInsta.replace(/^@/, "")}`)
+        : SITE_CONFIG.instagramUrl;
+
+      const [zapCanvas, instaCanvas] = await Promise.all([
+        createQRCanvasPromise(waLink, "#0f172a", WHATSAPP_SVG_DATA_URI),
+        createQRCanvasPromise(instaClean, "#0f172a", null)
+      ]);
+
+      const phoneFormatted = document.getElementById("wa-phone").value.trim();
+      const instaDisplay = rawInsta
+        ? (rawInsta.startsWith("http") ? "@" + rawInsta.split("/").filter(Boolean).pop() : (rawInsta.startsWith("@") ? rawInsta : "@" + rawInsta))
+        : "";
+
+      const items = [
+        {
+          title: "WI-FI",
+          img: proState.wifiImg,
+          line1: proState.wifiName.trim() ? `Rede: ${proState.wifiName.trim()}` : "",
+          line2: proState.wifiPass.trim() ? `Senha: ${proState.wifiPass.trim()}` : ""
+        },
+        {
+          title: "PIX",
+          img: proState.pixImg,
+          line1: proState.pixHolder.trim() ? proState.pixHolder.trim() : "",
+          line2: proState.pixKey.trim() ? `Chave: ${proState.pixKey.trim()}` : ""
+        },
+        {
+          title: "WHATSAPP",
+          img: zapCanvas,
+          line1: phoneFormatted,
+          line2: proState.zapLabel.trim()
+        },
+        {
+          title: "INSTAGRAM",
+          img: instaCanvas,
+          line1: instaDisplay,
+          line2: ""
+        }
+      ];
+
+      // Grade 2x2 centralizada para 10cm x 15cm
+      const sideMargin = W * 0.105;
+      const colGap = W * 0.09;
+      const boxSize = (W - sideMargin * 2 - colGap) / 2;
+      const rowStep = (H - gridStartY - H * 0.055) / 2;
+
+      items.forEach((item, idx) => {
+        const col = idx % 2;
+        const row = Math.floor(idx / 2);
+        const boxX = sideMargin + col * (boxSize + colGap);
+        const boxY = gridStartY + row * rowStep;
+
+        const slot = drawPinFrame(ctx, boxX, boxY, boxSize, secondary, primary);
+
+        ctx.save();
+        if (isProtected) {
+          ctx.filter = "blur(18px)";
+        }
+
+        if (item.img) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
+          ctx.drawImage(item.img, slot.qrX, slot.qrY, slot.qrSize, slot.qrSize);
+        } else {
+          ctx.fillStyle = "#f1f5f9";
+          ctx.fillRect(slot.qrX, slot.qrY, slot.qrSize, slot.qrSize);
+          ctx.fillStyle = "#64748b";
+          ctx.font = `700 ${Math.round(boxSize * 0.082)}px 'Plus Jakarta Sans', sans-serif`;
+          ctx.textAlign = "center";
+          ctx.fillText("SUBIR PRINT", slot.qrX + slot.qrSize / 2, slot.qrY + slot.qrSize * 0.46);
+          ctx.fillText(item.title, slot.qrX + slot.qrSize / 2, slot.qrY + slot.qrSize * 0.59);
+        }
+        ctx.restore();
+
+        if (isProtected) {
+          ctx.save();
+          ctx.fillStyle = "rgba(15, 23, 42, 0.80)";
+          const pillW = slot.qrSize * 0.78;
+          const pillH = slot.qrSize * 0.21;
+          roundRectPath(
+            ctx,
+            slot.qrX + (slot.qrSize - pillW) / 2,
+            slot.qrY + (slot.qrSize - pillH) / 2,
+            pillW,
+            pillH,
+            16
+          );
+          ctx.fill();
+
+          ctx.fillStyle = "#fbbf24";
+          ctx.font = `800 ${Math.round(boxSize * 0.072)}px 'Plus Jakarta Sans', sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("PRÉVIA PRO", slot.qrX + slot.qrSize / 2, slot.qrY + slot.qrSize / 2);
+          ctx.restore();
+        }
+
+        const titleY = boxY + boxSize + H * 0.043;
+        ctx.save();
+        ctx.font = `700 ${Math.round(H * 0.032)}px 'Oswald', sans-serif`;
+        ctx.fillStyle = primary;
+        ctx.textAlign = "center";
+        ctx.fillText(item.title, boxX + boxSize / 2, titleY);
+
+        const lines = [item.line1, item.line2].filter(Boolean);
+        const maxColTextW = boxSize + colGap * 0.65;
+        lines.forEach((lineText, lIdx) => {
+          let subFontSize = Math.round(H * 0.0175);
+          ctx.font = `600 ${subFontSize}px 'Plus Jakarta Sans', sans-serif`;
+          while (ctx.measureText(lineText).width > maxColTextW && subFontSize > 30) {
+            subFontSize -= 2;
+            ctx.font = `600 ${subFontSize}px 'Plus Jakarta Sans', sans-serif`;
+          }
+          let displayTxt = lineText;
+          while (ctx.measureText(displayTxt).width > maxColTextW && displayTxt.length > 4) {
+            displayTxt = displayTxt.slice(0, -2) + "…";
+          }
+          ctx.fillStyle = "#334155";
+          const lineY = titleY + H * 0.025 + lIdx * (H * 0.021);
+          ctx.fillText(displayTxt, boxX + boxSize / 2, lineY);
+        });
+        ctx.restore();
+      });
+
+      if (isProtected) {
+        ctx.save();
+        ctx.translate(W / 2, H / 2);
+        ctx.rotate(-Math.PI / 6);
+        ctx.fillStyle = "rgba(15, 23, 42, 0.11)";
+        ctx.font = `800 ${Math.round(H * 0.028)}px 'Plus Jakarta Sans', sans-serif`;
+        ctx.textAlign = "center";
+        for (let row = -4; row <= 4; row++) {
+          ctx.fillText("PRÉVIA 10×15CM • LIBERE PARA BAIXAR", 0, row * (H * 0.15));
+        }
+        ctx.restore();
+      }
+    }
+
+    // SISTEMA DE RECORTE INTERATIVO
+    const cropperState = {
+      targetType: null,
+      img: null,
+      scale: 1,
+      offsetX: 0,
+      offsetY: 0,
+      dragging: false,
+      lastX: 0,
+      lastY: 0
+    };
+
+    function openCropper(file, targetType) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          cropperState.targetType = targetType;
+          cropperState.img = img;
+          const minDim = Math.min(img.width, img.height);
+          cropperState.scale = 320 / minDim;
+          cropperState.offsetX = (400 - img.width * cropperState.scale) / 2;
+          cropperState.offsetY = (400 - img.height * cropperState.scale) / 2;
+
+          document.getElementById("cropper-title").textContent =
+            targetType === "wifi" ? "Recortar QR Code do Wi-Fi" : "Recortar QR Code do Pix";
+          document.getElementById("cropper-zoom").value = "1";
+          document.getElementById("cropper-zoom-label").textContent = "100%";
+          document.getElementById("cropper-modal").classList.remove("hidden");
+          drawCropperCanvas();
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function drawCropperCanvas() {
+      const canvas = document.getElementById("cropper-canvas");
+      const ctx = canvas.getContext("2d");
+      const zoomMult = parseFloat(document.getElementById("cropper-zoom").value);
+      const s = cropperState.scale * zoomMult;
+
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(0, 0, 400, 400);
+
+      if (cropperState.img) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(
+          cropperState.img,
+          cropperState.offsetX,
+          cropperState.offsetY,
+          cropperState.img.width * s,
+          cropperState.img.height * s
+        );
+      }
+
+      ctx.fillStyle = "rgba(15, 23, 42, 0.58)";
+      ctx.fillRect(0, 0, 400, 60);
+      ctx.fillRect(0, 340, 400, 60);
+      ctx.fillRect(0, 60, 60, 280);
+      ctx.fillRect(340, 60, 60, 280);
+
+      ctx.strokeStyle = "#10b981";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(60, 60, 280, 280);
+    }
+
+    function confirmCropper() {
+      if (!cropperState.img) return;
+      const outCanvas = document.createElement("canvas");
+      outCanvas.width = 600;
+      outCanvas.height = 600;
+      const outCtx = outCanvas.getContext("2d");
+      outCtx.imageSmoothingEnabled = true;
+      outCtx.imageSmoothingQuality = "high";
+
+      const zoomMult = parseFloat(document.getElementById("cropper-zoom").value);
+      const s = cropperState.scale * zoomMult;
+      const ratio = 600 / 280;
+
+      outCtx.fillStyle = "#ffffff";
+      outCtx.fillRect(0, 0, 600, 600);
+      outCtx.drawImage(
+        cropperState.img,
+        (cropperState.offsetX - 60) * ratio,
+        (cropperState.offsetY - 60) * ratio,
+        cropperState.img.width * s * ratio,
+        cropperState.img.height * s * ratio
+      );
+
+      const croppedImg = new Image();
+      croppedImg.onload = () => {
+        if (cropperState.targetType === "wifi") {
+          proState.wifiImg = croppedImg;
+          document.getElementById("pro-wifi-upload-label").textContent = "✓ Print Wi-Fi OK";
+          trackFunnelEvent("pro_wifi_uploaded");
+        } else {
+          proState.pixImg = croppedImg;
+          document.getElementById("pro-pix-upload-label").textContent = "✓ Print Pix OK";
+          trackFunnelEvent("pro_pix_uploaded");
+        }
+        document.getElementById("cropper-modal").classList.add("hidden");
+        renderProBoard();
+        showToast("QR Code recortado e aplicado!");
+      };
+      croppedImg.src = outCanvas.toDataURL("image/png");
+    }
+
+    function unlockProMode({ paymentId, orderRef, downloadGrant, customizationHash }) {
+      if (!paymentId || !orderRef || !downloadGrant) return;
+      proState.unlocked = true;
+      proState.validatedPaymentId = String(paymentId);
+      proState.orderRef = String(orderRef);
+      proState.downloadGrant = String(downloadGrant);
+      proState.approvedCustomizationHash = String(customizationHash || "");
+      saveVolatileCheckoutState();
+
+      document.getElementById("pro-locked-panel").classList.add("hidden");
+      document.getElementById("pro-unlocked-panel").classList.remove("hidden");
+      document.getElementById("pro-price-display").textContent = "LIBERADO";
+      renderProBoard();
+    }
+
+    async function verifyPaymentWithServer(paymentId = "", orderRefOverride = "") {
+      const cleanId = cleanDigits(paymentId);
+      const targetOrderRef = String(orderRefOverride || proState.orderRef || "").trim();
+
+      if (!cleanId && !targetOrderRef) {
+        showToast("Digite um número de pagamento válido.");
+        return false;
+      }
+
+      try {
+        const customizationHash = await computeBoardCustomizationHash();
+        const headers = { "Content-Type": "application/json" };
+        if (proState.sessionToken) {
+          headers["X-Order-Session"] = proState.sessionToken;
+        }
+
+        const res = await fetch("/api/verificar-pagamento", {
+          method: "POST",
+          credentials: "same-origin",
+          headers,
+          body: JSON.stringify({
+            payment_id: cleanId || undefined,
+            order_ref: targetOrderRef || undefined,
+            session_token: proState.sessionToken || undefined,
+            customization_hash: customizationHash
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.aprovado && data.download_grant) {
+          unlockProMode({
+            paymentId: data.payment_id || cleanId,
+            orderRef: data.order_ref || targetOrderRef,
+            downloadGrant: data.download_grant,
+            customizationHash
+          });
+          trackFunnelEvent("pro_payment_approved", { paymentId: data.payment_id || cleanId });
+          return true;
+        } else {
+          showToast(data.error || "Pagamento não validado para esta placa.");
+          return false;
+        }
+      } catch (e) {
+        showToast("Erro de conexão ao validar o pagamento no servidor.");
+        return false;
+      }
+    }
+
+    async function iniciarCheckoutPro() {
+      const btn = document.getElementById("pro-pay-btn");
+      const originalText = btn.textContent;
+      trackFunnelEvent("pro_checkout_started", { price: 9.9 });
+      btn.disabled = true;
+      btn.textContent = "Conectando ao Mercado Pago...";
+
+      try {
+        saveVolatileCheckoutState();
+        const customizationHash = await computeBoardCustomizationHash();
+        const res = await fetch("/api/criar-pagamento", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customization_hash: customizationHash
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.init_point || !data.order_ref) {
+          throw new Error(data.error || "Falha ao iniciar o Checkout Pro.");
+        }
+        proState.orderRef = data.order_ref;
+        proState.sessionToken = data.session_token || null;
+        saveVolatileCheckoutState();
+        window.location.href = data.init_point;
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = originalText;
+        showToast(err.message || "Não foi possível iniciar o pagamento agora.");
+      }
+    }
+
+    async function checkServerReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const paymentId = cleanDigits(params.get("payment_id") || params.get("collection_id") || "");
+      const urlOrderRef = params.get("order_ref") || "";
+      if (urlOrderRef) {
+        proState.orderRef = urlOrderRef;
+      }
+
+      const targetOrderRef = urlOrderRef || proState.orderRef || "";
+      const savedPaymentId = paymentId || proState.validatedPaymentId || "";
+
+      if (savedPaymentId || targetOrderRef) {
+        showToast("Validando pagamento no servidor...");
+        const ok = await verifyPaymentWithServer(savedPaymentId, targetOrderRef);
+        if (ok) {
+          if (params.has("payment_id") || params.has("collection_id") || params.has("retorno")) {
+            window.history.replaceState({}, document.title, window.location.pathname + "#placa-pro");
+            const sec = document.getElementById("placa-pro");
+            if (sec) sec.scrollIntoView({ behavior: "smooth" });
+          }
+          showToast("Pagamento confirmado! Placa 10×15cm PRO liberada.");
+        }
+      }
+    }
+
+    // EXPORTAÇÃO FINAL 10CM x 15CM (PNG 600 DPI = 2362x3543px | PDF A4 = 100mm x 150mm)
+    async function exportProBoard10x15(mode = "png") {
+      if (!proState.unlocked || !proState.validatedPaymentId || !proState.orderRef || !proState.downloadGrant) {
+        showToast("Valide o pagamento antes de baixar o arquivo final.");
+        return;
+      }
+
+      try {
+        const currentHash = await computeBoardCustomizationHash();
+        const headers = { "Content-Type": "application/json" };
+        if (proState.sessionToken) {
+          headers["X-Order-Session"] = proState.sessionToken;
+        }
+
+        const authRes = await fetch("/api/autorizar-download", {
+          method: "POST",
+          credentials: "same-origin",
+          headers,
+          body: JSON.stringify({
+            order_ref: proState.orderRef,
+            payment_id: proState.validatedPaymentId,
+            session_token: proState.sessionToken || undefined,
+            customization_hash: currentHash,
+            download_grant: proState.downloadGrant
+          })
+        });
+
+        const authData = await authRes.json();
+        if (!authRes.ok || !authData.authorized) {
+          showToast(authData.error || "Download não autorizado para esta placa.");
+          return;
+        }
+
+        if (authData.download_grant) {
+          proState.downloadGrant = authData.download_grant;
+        }
+      } catch (e) {
+        showToast("Erro de conexão ao validar permissão de download.");
+        return;
+      }
+
+      const hdCanvas = document.createElement("canvas");
+      hdCanvas.width = 2362;  // 100mm em 600 DPI
+      hdCanvas.height = 3543; // 150mm em 600 DPI
+      await renderProBoard(hdCanvas, true);
+      const dataUrl = hdCanvas.toDataURL("image/png", 1.0);
+      trackFunnelEvent("pro_file_exported", { mode });
+
+      if (mode === "png") {
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = "placa-balcao-10x15cm-sublibox-qr.png";
+        a.click();
+        showToast("Placa 10×15cm (600 DPI) baixada!");
+        return;
+      }
+
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        showToast("Carregando gerador de PDF. Aguarde 2 segundos e clique novamente.");
+        return;
+      }
+
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4",
+          compress: false
+        });
+
+        const placaLarguraMm = 100; // 10,0 cm exatos
+        const placaAlturaMm = 150;  // 15,0 cm exatos
+        const posX = (210 - placaLarguraMm) / 2; // 55 mm
+        const posY = (297 - placaAlturaMm) / 2; // 73.5 mm
+
+        pdf.addImage(dataUrl, "PNG", posX, posY, placaLarguraMm, placaAlturaMm, undefined, "NONE");
+
+        pdf.setDrawColor(148, 163, 184);
+        pdf.setLineWidth(0.2);
+        pdf.rect(posX, posY, placaLarguraMm, placaAlturaMm, "S");
+
+        pdf.save("placa-balcao-10x15cm-sublibox-qr.pdf");
+        showToast("PDF A4 (1 página • 10×15cm exatos) baixado!");
+      } catch (err) {
+        showToast("Erro ao gerar o arquivo PDF. Tente novamente.");
+      }
+    }
+
+    // PLACA SIMPLES GRATUITA 10x15CM
+    async function renderSimplePlate() {
+      const canvas = document.getElementById("simple-plate-canvas");
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 8;
+      roundRectPath(ctx, 45, 45, W - 90, H - 90, 56);
+      ctx.stroke();
+
+      ctx.fillStyle = freeState.color;
+      ctx.fillRect(45, 45, W - 90, 44);
+      ctx.fillRect(45, H - 89, W - 90, 44);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "800 66px 'Plus Jakarta Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(document.getElementById("plate-title-input").value || "Fale Conosco no WhatsApp", W / 2, 235, W - 180);
+
+      const qrCanvas = await createQRCanvasPromise(buildWhatsAppLink(), freeState.color, getCurrentCenterImage());
+      if (qrCanvas) {
+        ctx.drawImage(qrCanvas, 210, 340, 780, 780);
+      }
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "600 38px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText(document.getElementById("plate-sub-input").value || "", W / 2, 1250, W - 200);
+
+      ctx.fillStyle = freeState.color;
+      ctx.font = "800 58px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText("+55 " + (document.getElementById("wa-phone").value || SITE_CONFIG.defaultPhone), W / 2, 1420);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "600 28px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText("Sublibox Qr • Escaneie com a câmera", W / 2, 1550);
+    }
+
+    function renderAffiliateCards() {
+      const grid = document.getElementById("affiliate-grid");
+      if (!grid) return;
+      grid.innerHTML = SITE_CONFIG.affiliateProducts.map((p) => `
+        <a href="${p.url}" target="_blank" rel="noopener sponsored" class="group bg-white border border-slate-200 hover:border-emerald-400 rounded-2xl p-5 shadow-sm hover:shadow transition flex flex-col justify-between">
+          <div>
+            <span class="inline-block text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 mb-2.5">
+              ${p.tag}
+            </span>
+            <h3 class="font-bold text-sm text-slate-900 group-hover:text-emerald-700 transition">${p.title}</h3>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">${p.subtitle}</p>
+          </div>
+          <div class="mt-4 text-xs font-extrabold text-emerald-600 flex items-center gap-1">
+            Ver suporte 10×15cm na Shopee →
+          </div>
+        </a>
+      `).join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      document.getElementById("current-year").textContent = new Date().getFullYear();
+      document.getElementById("pro-pay-btn").addEventListener("click", iniciarCheckoutPro);
+      document.getElementById("pro-wipe-all-btn").addEventListener("click", wipeAllSensitiveData);
+
+      const orderBtn = document.getElementById("sublibox-order-btn");
+      if (orderBtn) {
+        orderBtn.href = `https://wa.me/${SITE_CONFIG.whatsappOrderDigits}?text=${encodeURIComponent(SITE_CONFIG.orderMessage)}`;
+      }
+
+      renderAffiliateCards();
+      await restoreVolatileCheckoutState();
+      await checkServerReturn();
+      updateMainQR();
+
+      document.getElementById("wa-phone").addEventListener("input", (e) => {
+        e.target.value = formatBrPhone(e.target.value);
+        updateMainQR();
+      });
+
+      document.getElementById("clear-phone-btn").addEventListener("click", () => {
+        const inp = document.getElementById("wa-phone");
+        inp.value = "";
+        inp.focus();
+        updateMainQR();
+      });
+
+      document.getElementById("wa-message").addEventListener("input", (e) => {
+        document.getElementById("msg-counter").textContent = `${e.target.value.length}/250`;
+        updateMainQR();
+      });
+
+      document.querySelectorAll(".quick-msg-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const inp = document.getElementById("wa-message");
+          inp.value = btn.dataset.msg;
+          document.getElementById("msg-counter").textContent = `${inp.value.length}/250`;
+          updateMainQR();
+        });
+      });
+
+      document.getElementById("qr-color").addEventListener("input", (e) => {
+        freeState.color = e.target.value;
+        updateMainQR();
+      });
+
+      document.querySelectorAll(".preset-color").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          freeState.color = btn.dataset.color;
+          document.getElementById("qr-color").value = freeState.color;
+          updateMainQR();
+        });
+      });
+
+      document.querySelectorAll(".qr-style-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".qr-style-btn").forEach((b) => {
+            b.classList.remove("active", "bg-white", "text-slate-900", "shadow-sm");
+            b.classList.add("text-slate-600");
+          });
+          btn.classList.add("active", "bg-white", "text-slate-900", "shadow-sm");
+          btn.classList.remove("text-slate-600");
+          freeState.style = btn.dataset.style;
+          updateMainQR();
+        });
+      });
+
+      document.getElementById("use-wa-icon").addEventListener("change", (e) => {
+        freeState.useWaIcon = e.target.checked;
+        updateMainQR();
+      });
+
+      document.getElementById("custom-logo-input").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          freeState.customLogoDataUrl = ev.target.result;
+          document.getElementById("remove-custom-logo").classList.remove("hidden");
+          updateMainQR();
+          showToast("Logo aplicada no centro do QR Code!");
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById("remove-custom-logo").addEventListener("click", () => {
+        freeState.customLogoDataUrl = null;
+        document.getElementById("custom-logo-input").value = "";
+        document.getElementById("remove-custom-logo").classList.add("hidden");
+        updateMainQR();
+      });
+
+      document.getElementById("copy-link-btn").addEventListener("click", async () => {
+        const input = document.getElementById("generated-link");
+        const val = input.value;
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(val);
+          } else {
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+          }
+          trackFunnelEvent("free_qr_link_copied");
+          showToast("Link oficial wa.me copiado!");
+        } catch (err) {
+          input.select();
+          document.execCommand("copy");
+          showToast("Link oficial wa.me copiado!");
+        }
+      });
+
+      document.getElementById("download-png-btn").addEventListener("click", () => {
+        if (typeof QRCodeStyling === "undefined") return;
+        const qr = new QRCodeStyling(getMainQROptions(600));
+        qr.download({
+          name: `qrcode-whatsapp-${cleanDigits(document.getElementById("wa-phone").value) || "5585992657254"}`,
+          extension: "png"
+        });
+        trackFunnelEvent("free_qr_downloaded", { format: "png_600" });
+        showToast("QR Code PNG (600px) baixado!");
+      });
+
+      document.getElementById("download-hd-btn").addEventListener("click", () => {
+        if (typeof QRCodeStyling === "undefined") return;
+        const qr = new QRCodeStyling(getMainQROptions(1500));
+        qr.download({
+          name: `qrcode-whatsapp-hd-${cleanDigits(document.getElementById("wa-phone").value) || "5585992657254"}`,
+          extension: "png"
+        });
+        trackFunnelEvent("free_qr_downloaded", { format: "png_1500" });
+        showToast("QR Code Alta Definição (1500px) baixado!");
+      });
+
+      document.getElementById("download-svg-btn").addEventListener("click", () => {
+        if (typeof QRCodeStyling === "undefined") return;
+        const opts = getMainQROptions(1000);
+        opts.type = "svg";
+        const qr = new QRCodeStyling(opts);
+        qr.download({
+          name: `qrcode-whatsapp-${cleanDigits(document.getElementById("wa-phone").value) || "5585992657254"}`,
+          extension: "svg"
+        });
+        trackFunnelEvent("free_qr_downloaded", { format: "svg" });
+        showToast("Vetor SVG baixado!");
+      });
+
+      // Modal placa simples 10x15cm
+      document.getElementById("open-print-modal-btn").addEventListener("click", () => {
+        document.getElementById("print-modal").classList.remove("hidden");
+        renderSimplePlate();
+      });
+      document.getElementById("close-print-modal").addEventListener("click", () => {
+        document.getElementById("print-modal").classList.add("hidden");
+      });
+      document.getElementById("plate-title-input").addEventListener("input", renderSimplePlate);
+      document.getElementById("plate-sub-input").addEventListener("input", renderSimplePlate);
+      document.getElementById("download-simple-plate-btn").addEventListener("click", () => {
+        const a = document.createElement("a");
+        a.href = document.getElementById("simple-plate-canvas").toDataURL("image/png");
+        a.download = "placa-whatsapp-10x15cm.png";
+        a.click();
+        showToast("Placa 10×15cm baixada!");
+      });
+      document.getElementById("print-simple-plate-btn").addEventListener("click", () => {
+        const dataUrl = document.getElementById("simple-plate-canvas").toDataURL("image/png");
+        const printArea = document.getElementById("print-area");
+        printArea.innerHTML = `<img src="${dataUrl}" style="width:100mm; height:150mm; display:block; margin:0 auto;" />`;
+        printArea.classList.remove("hidden");
+        setTimeout(() => {
+          window.print();
+          printArea.classList.add("hidden");
+        }, 150);
+      });
+
+      // Eventos da Placa PRO 10x15cm
+      document.getElementById("pro-company-input").addEventListener("input", (e) => {
+        proState.companyName = e.target.value;
+        renderProBoard();
+      });
+      document.getElementById("pro-show-company").addEventListener("change", (e) => {
+        proState.showCompany = e.target.checked;
+        renderProBoard();
+      });
+      document.getElementById("pro-show-logo").addEventListener("change", (e) => {
+        proState.showLogo = e.target.checked;
+        renderProBoard();
+      });
+
+      document.getElementById("pro-logo-input").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            proState.logoImg = img;
+            extractColorsFromImage(img);
+            document.getElementById("pro-clear-logo").classList.remove("hidden");
+            renderProBoard();
+            trackFunnelEvent("pro_logo_uploaded");
+            showToast("Logo aplicada e paleta de cores adaptada!");
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById("pro-clear-logo").addEventListener("click", () => {
+        proState.logoImg = null;
+        proState.primaryColor = "#14456b";
+        proState.secondaryColor = "#5eb5c9";
+        updateSwatches();
+        document.getElementById("pro-logo-input").value = "";
+        document.getElementById("pro-clear-logo").classList.add("hidden");
+        renderProBoard();
+      });
+
+      document.getElementById("pro-wifi-file").addEventListener("change", (e) => {
+        if (e.target.files[0]) openCropper(e.target.files[0], "wifi");
+        e.target.value = "";
+      });
+      document.getElementById("pro-pix-file").addEventListener("change", (e) => {
+        if (e.target.files[0]) openCropper(e.target.files[0], "pix");
+        e.target.value = "";
+      });
+
+      ["pro-wifi-name", "pro-wifi-pass", "pro-pix-holder", "pro-pix-key", "pro-insta-input", "pro-zap-label"].forEach((id) => {
+        document.getElementById(id).addEventListener("input", (e) => {
+          const val = e.target.value;
+          if (id === "pro-wifi-name") proState.wifiName = val;
+          if (id === "pro-wifi-pass") proState.wifiPass = val;
+          if (id === "pro-pix-holder") proState.pixHolder = val;
+          if (id === "pro-pix-key") proState.pixKey = val;
+          if (id === "pro-insta-input") proState.instaHandle = val;
+          if (id === "pro-zap-label") proState.zapLabel = val;
+          renderProBoard();
+        });
+      });
+
+      // Eventos do Cropper
+      const stage = document.getElementById("cropper-stage");
+      stage.addEventListener("pointerdown", (e) => {
+        cropperState.dragging = true;
+        cropperState.lastX = e.clientX;
+        cropperState.lastY = e.clientY;
+        stage.setPointerCapture(e.pointerId);
+      });
+      stage.addEventListener("pointermove", (e) => {
+        if (!cropperState.dragging) return;
+        cropperState.offsetX += e.clientX - cropperState.lastX;
+        cropperState.offsetY += e.clientY - cropperState.lastY;
+        cropperState.lastX = e.clientX;
+        cropperState.lastY = e.clientY;
+        drawCropperCanvas();
+      });
+      stage.addEventListener("pointerup", () => (cropperState.dragging = false));
+
+      function updateCropperZoom(newVal) {
+        const clamped = Math.min(3.5, Math.max(0.5, Number(newVal)));
+        const slider = document.getElementById("cropper-zoom");
+        slider.value = clamped.toFixed(2);
+        document.getElementById("cropper-zoom-label").textContent = Math.round(clamped * 100) + "%";
+        drawCropperCanvas();
+      }
+
+      document.getElementById("cropper-zoom").addEventListener("input", (e) => updateCropperZoom(e.target.value));
+      document.getElementById("cropper-zoom-out").addEventListener("click", () => {
+        updateCropperZoom(parseFloat(document.getElementById("cropper-zoom").value) - 0.15);
+      });
+      document.getElementById("cropper-zoom-in").addEventListener("click", () => {
+        updateCropperZoom(parseFloat(document.getElementById("cropper-zoom").value) + 0.15);
+      });
+      document.getElementById("cropper-close").addEventListener("click", () => document.getElementById("cropper-modal").classList.add("hidden"));
+      document.getElementById("cropper-cancel").addEventListener("click", () => document.getElementById("cropper-modal").classList.add("hidden"));
+      document.getElementById("cropper-confirm").addEventListener("click", confirmCropper);
+
+      // Validação manual via ID real do Mercado Pago no servidor
+      document.getElementById("pro-unlock-btn").addEventListener("click", async () => {
+        const btn = document.getElementById("pro-unlock-btn");
+        const inputVal = document.getElementById("pro-unlock-input").value.trim();
+        btn.disabled = true;
+        btn.textContent = "Validando...";
+        const ok = await verifyPaymentWithServer(inputVal);
+        btn.disabled = false;
+        btn.textContent = "Validar ID";
+        if (ok) {
+          showToast("Pagamento validado no servidor! Placa 10×15cm PRO liberada.");
+        }
+      });
+
+      document.getElementById("pro-download-png-btn").addEventListener("click", () => exportProBoard10x15("png"));
+      document.getElementById("pro-print-a4-btn").addEventListener("click", () => exportProBoard10x15("print"));
+    });
+  </script>
+</body>
+</html>
